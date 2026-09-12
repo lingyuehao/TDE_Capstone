@@ -1,0 +1,519 @@
+<title>Charge Category Map</title>
+<style>
+.viz-root {
+  color-scheme: light;
+  --surface-1:      #fcfcfb;
+  --page:           #f9f9f7;
+  --text-primary:   #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted:     #898781;
+  --grid:           #e1e0d9;
+  --baseline:       #c3c2b7;
+  --border:         rgba(11,11,11,0.10);
+  --track:          #f0efec;
+
+  --cat-1: #2a78d6; /* Base Freight / Transportation */
+  --cat-2: #eb6834; /* Fuel Surcharge */
+  --cat-3: #1baf7a; /* Discounts & Credits */
+  --cat-4: #eda100; /* Accessorial / Delivery Surcharge */
+  --cat-5: #e87ba4; /* Taxes & Customs */
+  --cat-6: #008300; /* Administrative & Service Fees */
+  --cat-other: #898781;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) .viz-root {
+    color-scheme: dark;
+    --surface-1:      #1a1a19;
+    --page:           #0d0d0d;
+    --text-primary:   #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted:     #898781;
+    --grid:           #2c2c2a;
+    --baseline:       #383835;
+    --border:         rgba(255,255,255,0.10);
+    --track:          #232322;
+
+    --cat-1: #3987e5;
+    --cat-2: #d95926;
+    --cat-3: #199e70;
+    --cat-4: #c98500;
+    --cat-5: #d55181;
+    --cat-6: #008300;
+    --cat-other: #898781;
+  }
+}
+:root[data-theme="dark"] .viz-root {
+  color-scheme: dark;
+  --surface-1:      #1a1a19;
+  --page:           #0d0d0d;
+  --text-primary:   #ffffff;
+  --text-secondary: #c3c2b7;
+  --text-muted:     #898781;
+  --grid:           #2c2c2a;
+  --baseline:       #383835;
+  --border:         rgba(255,255,255,0.10);
+  --track:          #232322;
+
+  --cat-1: #3987e5;
+  --cat-2: #d95926;
+  --cat-3: #199e70;
+  --cat-4: #c98500;
+  --cat-5: #d55181;
+  --cat-6: #008300;
+  --cat-other: #898781;
+}
+
+* { box-sizing: border-box; }
+.viz-root {
+  background: var(--page);
+  color: var(--text-primary);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  padding: 24px 16px 48px;
+}
+.wrap { max-width: 980px; margin: 0 auto; }
+
+h1 { font-size: 21px; font-weight: 650; margin: 0 0 4px; }
+.subtitle { font-size: 14px; color: var(--text-secondary); margin: 0 0 20px; max-width: 640px; line-height: 1.5; }
+
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.kpi {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.kpi .label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+.kpi .value { font-size: 22px; font-weight: 650; font-variant-numeric: proportional-nums; }
+
+.card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 18px 8px;
+  margin-bottom: 20px;
+}
+.card h2 { font-size: 14px; font-weight: 650; margin: 0 0 2px; }
+.card .card-sub { font-size: 12px; color: var(--text-muted); margin: 0 0 14px; }
+
+/* top-level bar list */
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 7px 0;
+  position: relative;
+}
+.bar-row .swatch {
+  width: 10px; height: 10px; border-radius: 2px; flex: none;
+}
+.bar-row .name { font-size: 13px; width: 190px; flex: none; color: var(--text-primary); }
+.bar-row .track {
+  flex: 1 1 auto;
+  height: 20px;
+  background: var(--track);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+.bar-row .fill {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  border-radius: 4px;
+  transition: filter 0.1s;
+}
+.bar-row .track:hover .fill,
+.bar-row .track:focus-visible .fill { filter: brightness(1.08); }
+.bar-row .figs { width: 148px; flex: none; text-align: right; font-size: 12px; }
+.bar-row .figs .pct { color: var(--text-primary); font-weight: 600; }
+.bar-row .figs .amt { color: var(--text-muted); margin-left: 6px; }
+
+/* small multiples grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+.panel {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.panel .accent { height: 4px; }
+.panel .panel-body { padding: 14px 16px 14px; }
+.panel .panel-title { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; }
+.panel .panel-title .name { font-size: 13px; font-weight: 650; }
+.panel .panel-title .total { font-size: 11px; color: var(--text-muted); }
+
+.sub-row { margin-bottom: 9px; }
+.sub-row .sub-label {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 11.5px; margin-bottom: 3px;
+}
+.sub-row .sub-name { color: var(--text-secondary); }
+.sub-row .sub-count { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.sub-row .track {
+  height: 8px; background: var(--track); border-radius: 4px; overflow: hidden; cursor: pointer;
+}
+.sub-row .fill { height: 100%; border-radius: 4px; }
+
+/* tooltip */
+.tt {
+  position: fixed;
+  pointer-events: none;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  z-index: 50;
+  opacity: 0;
+  transition: opacity 0.08s;
+  max-width: 240px;
+}
+.tt.show { opacity: 1; }
+.tt .tt-val { font-weight: 650; color: var(--text-primary); font-size: 13px; }
+.tt .tt-key { color: var(--text-muted); margin-top: 2px; }
+
+.toggle-row { display: flex; justify-content: flex-end; margin: -8px 0 14px; }
+.toggle-btn {
+  font-size: 12px; color: var(--text-secondary); background: var(--surface-1);
+  border: 1px solid var(--border); border-radius: 7px; padding: 5px 10px; cursor: pointer;
+  font-family: inherit;
+}
+.toggle-btn:hover { color: var(--text-primary); }
+
+table.data-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+table.data-table th, table.data-table td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--grid); }
+table.data-table th { color: var(--text-muted); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.02em; }
+table.data-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.data-table tr:last-child td { border-bottom: none; }
+.table-wrap { overflow-x: auto; }
+
+.foot-note { font-size: 12px; color: var(--text-muted); line-height: 1.6; margin-top: -4px; }
+
+@media (max-width: 520px) {
+  .bar-row .name { width: 108px; font-size: 12px; }
+  .bar-row .figs { width: 100px; }
+  .bar-row .figs .amt { display: none; }
+}
+</style>
+
+<div class="viz-root">
+  <div class="wrap">
+    <h1>Charge Category Map</h1>
+    <p class="subtitle">
+      256,764 charge line items from the tracking-detail table, rolled up from
+      3,032 distinct raw (Charge Type, Charge Description) labels into 6 major
+      categories via the rule + TF-IDF classifier.
+    </p>
+
+    <div class="kpi-row">
+      <div class="kpi"><div class="label">Charge line items</div><div class="value" id="kpi-rows">—</div></div>
+      <div class="kpi"><div class="label">Distinct raw labels</div><div class="value" id="kpi-labels">3,032</div></div>
+      <div class="kpi"><div class="label">Auto-categorized</div><div class="value" id="kpi-coverage">—</div></div>
+    </div>
+
+    <div class="card">
+      <h2>Major categories, by share of charge lines</h2>
+      <p class="card-sub">Bar length = share of all 256,764 charge lines. Hover a bar for the total $ value.</p>
+      <div id="top-chart"></div>
+    </div>
+
+    <div class="toggle-row">
+      <button class="toggle-btn" id="table-toggle" type="button">Show as table</button>
+    </div>
+
+    <div id="chart-view">
+      <div class="grid" id="panels"></div>
+    </div>
+
+    <div id="table-view" class="card" style="display:none;">
+      <h2>Full breakdown</h2>
+      <p class="card-sub">Every major category and subcategory, with row counts and total $ value.</p>
+      <div class="table-wrap">
+        <table class="data-table" id="data-table">
+          <thead>
+            <tr><th>Major category</th><th>Subcategory</th><th class="num">Rows</th><th class="num">% of rows</th><th class="num">Total value</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <p class="foot-note">
+      "Discounts &amp; Credits" nets negative (discounts reduce the invoice). Percentages are share of the
+      256,764 charge-line rows, not dollar value. "Other / Uncategorized" (2.1% of rows) is left out of the
+      panel grid below but included in the table view.
+    </p>
+  </div>
+</div>
+
+<div class="tt" id="tooltip"></div>
+
+<script>
+(function () {
+  var root = document.currentScript.previousElementSibling.previousElementSibling; // .viz-root wrap fallback not used
+  var DATA = [
+    { key: "cat-1", name: "Base Freight / Transportation", count: 68594, value: 7575084.11, subs: [
+      { name: "Transportation / Base Charge", count: 42751, value: 5658126.10 },
+      { name: "Ground", count: 18066, value: 256525.76 },
+      { name: "International / Export / Import Freight", count: 4932, value: 289150.32 },
+      { name: "Domestic Air (Next/2nd/3 Day)", count: 1729, value: 89909.89 },
+      { name: "Line Haul", count: 1107, value: 1274667.74 },
+      { name: "Ocean Freight", count: 9, value: 6704.30 }
+    ]},
+    { key: "cat-2", name: "Fuel Surcharge", count: 74071, value: 678557.24, subs: [
+      { name: "Domestic Fuel Surcharge", count: 67043, value: 651965.62 },
+      { name: "Fuel Surcharge Correction", count: 5571, value: 17309.02 },
+      { name: "International Fuel Surcharge", count: 1117, value: 8173.78 },
+      { name: "Chargeback Fuel Surcharge", count: 340, value: 1108.82 }
+    ]},
+    { key: "cat-3", name: "Discounts & Credits", count: 77774, value: -4003134.48, subs: [
+      { name: "General Discount", count: 36407, value: -3562129.27 },
+      { name: "Earned Discount", count: 22904, value: -375705.98 },
+      { name: "Grace Discount", count: 11814, value: -228506.64 },
+      { name: "Billing Adjustment / Correction", count: 5387, value: 38781.38 },
+      { name: "Chargeback / Reversal", count: 1190, value: 123331.93 },
+      { name: "Credit From Carrier", count: 72, value: 1094.10 }
+    ]},
+    { key: "cat-4", name: "Accessorial / Delivery Surcharge", count: 19967, value: 452077.66, subs: [
+      { name: "Delivery Area Surcharge (DAS)", count: 6875, value: 87821.60 },
+      { name: "Residential Delivery/Surcharge", count: 4767, value: 24471.46 },
+      { name: "Wait Time / Mileage / Toll", count: 2693, value: 110788.34 },
+      { name: "Additional Handling", count: 1684, value: 151469.51 },
+      { name: "Demand / Peak Surcharge", count: 968, value: 9617.35 },
+      { name: "Address Correction", count: 848, value: 12477.50 },
+      { name: "Signature Required", count: 803, value: 6718.75 },
+      { name: "Saturday / After Hours", count: 699, value: 13200.01 },
+      { name: "Security Surcharge", count: 630, value: 35513.14 }
+    ]},
+    { key: "cat-5", name: "Taxes & Customs", count: 7521, value: 360958.70, subs: [
+      { name: "VAT", count: 4282, value: 67909.66 },
+      { name: "Customs / Brokerage", count: 1397, value: 72860.23 },
+      { name: "GST / HST", count: 1066, value: 28403.12 },
+      { name: "Duty & Import Tax", count: 578, value: 169600.09 },
+      { name: "Sales / General Tax", count: 198, value: 22185.60 }
+    ]},
+    { key: "cat-6", name: "Administrative & Service Fees", count: 2692, value: 157337.78, subs: [
+      { name: "Third Party Billing", count: 918, value: 15163.44 },
+      { name: "Pickup Service", count: 654, value: 71669.49 },
+      { name: "Disbursement Fee", count: 553, value: 6377.96 },
+      { name: "Document Fee", count: 463, value: 17820.97 },
+      { name: "Package Handling / Storage", count: 104, value: 46305.92 }
+    ]},
+    { key: "cat-other", name: "Other / Uncategorized", count: 6145, value: 556843.34, subs: [
+      { name: "Unclassified", count: 6145, value: 556843.34 }
+    ]}
+  ];
+
+  var TOTAL_ROWS = DATA.reduce(function (s, d) { return s + d.count; }, 0);
+  var CATEGORIZED_ROWS = TOTAL_ROWS - DATA.find(function (d) { return d.key === "cat-other"; }).count;
+
+  document.getElementById("kpi-rows").textContent = TOTAL_ROWS.toLocaleString();
+  document.getElementById("kpi-coverage").textContent = (CATEGORIZED_ROWS / TOTAL_ROWS * 100).toFixed(1) + "%";
+
+  function fmtMoney(v) {
+    var sign = v < 0 ? "-" : "";
+    var abs = Math.abs(v);
+    return sign + "$" + abs.toLocaleString(undefined, { maximumFractionDigits: 0 });
+  }
+  function fmtCount(v) { return v.toLocaleString(); }
+
+  var tooltip = document.getElementById("tooltip");
+  function showTooltip(evt, title, valueLine, subLine) {
+    tooltip.innerHTML = "";
+    var val = document.createElement("div");
+    val.className = "tt-val";
+    val.textContent = valueLine;
+    var key = document.createElement("div");
+    key.className = "tt-key";
+    key.textContent = title;
+    tooltip.appendChild(val);
+    tooltip.appendChild(key);
+    if (subLine) {
+      var sub = document.createElement("div");
+      sub.className = "tt-key";
+      sub.textContent = subLine;
+      tooltip.appendChild(sub);
+    }
+    tooltip.classList.add("show");
+    positionTooltip(evt);
+  }
+  function positionTooltip(evt) {
+    var x = evt.clientX, y = evt.clientY;
+    var pad = 14;
+    var vw = window.innerWidth, vh = window.innerHeight;
+    tooltip.style.left = Math.min(x + pad, vw - 260) + "px";
+    tooltip.style.top = Math.min(y + pad, vh - 90) + "px";
+  }
+  function hideTooltip() { tooltip.classList.remove("show"); }
+
+  // ---- Top-level bar chart ----
+  var topChart = document.getElementById("top-chart");
+  var sortedTop = DATA.slice().sort(function (a, b) { return b.count - a.count; });
+  var maxPct = Math.max.apply(null, sortedTop.map(function (d) { return d.count / TOTAL_ROWS * 100; }));
+
+  sortedTop.forEach(function (d) {
+    var pct = d.count / TOTAL_ROWS * 100;
+    var row = document.createElement("div");
+    row.className = "bar-row";
+
+    var sw = document.createElement("div");
+    sw.className = "swatch";
+    sw.style.background = "var(--" + d.key + ")";
+    row.appendChild(sw);
+
+    var name = document.createElement("div");
+    name.className = "name";
+    name.textContent = d.name;
+    row.appendChild(name);
+
+    var track = document.createElement("div");
+    track.className = "track";
+    track.tabIndex = 0;
+    var fill = document.createElement("div");
+    fill.className = "fill";
+    fill.style.width = (pct / maxPct * 100).toFixed(1) + "%";
+    fill.style.background = "var(--" + d.key + ")";
+    track.appendChild(fill);
+    row.appendChild(track);
+
+    var figs = document.createElement("div");
+    figs.className = "figs";
+    var pctSpan = document.createElement("span");
+    pctSpan.className = "pct";
+    pctSpan.textContent = pct.toFixed(1) + "%";
+    var amtSpan = document.createElement("span");
+    amtSpan.className = "amt";
+    amtSpan.textContent = fmtMoney(d.value);
+    figs.appendChild(pctSpan);
+    figs.appendChild(amtSpan);
+    row.appendChild(figs);
+
+    function onMove(evt) {
+      showTooltip(evt, d.name, fmtCount(d.count) + " rows", "Total value: " + fmtMoney(d.value));
+    }
+    track.addEventListener("pointermove", onMove);
+    track.addEventListener("focus", function (evt) { showTooltip(evt, d.name, fmtCount(d.count) + " rows", "Total value: " + fmtMoney(d.value)); });
+    track.addEventListener("pointerleave", hideTooltip);
+    track.addEventListener("blur", hideTooltip);
+
+    topChart.appendChild(row);
+  });
+
+  // ---- Small multiples panels ----
+  var panelsEl = document.getElementById("panels");
+  DATA.filter(function (d) { return d.key !== "cat-other"; }).forEach(function (d) {
+    var panel = document.createElement("div");
+    panel.className = "panel";
+
+    var accent = document.createElement("div");
+    accent.className = "accent";
+    accent.style.background = "var(--" + d.key + ")";
+    panel.appendChild(accent);
+
+    var body = document.createElement("div");
+    body.className = "panel-body";
+
+    var title = document.createElement("div");
+    title.className = "panel-title";
+    var nm = document.createElement("div");
+    nm.className = "name";
+    nm.textContent = d.name;
+    var tot = document.createElement("div");
+    tot.className = "total";
+    tot.textContent = fmtCount(d.count) + " rows";
+    title.appendChild(nm);
+    title.appendChild(tot);
+    body.appendChild(title);
+
+    var maxSub = Math.max.apply(null, d.subs.map(function (s) { return s.count; }));
+    var sortedSubs = d.subs.slice().sort(function (a, b) { return b.count - a.count; });
+
+    sortedSubs.forEach(function (s) {
+      var row = document.createElement("div");
+      row.className = "sub-row";
+
+      var label = document.createElement("div");
+      label.className = "sub-label";
+      var sn = document.createElement("span");
+      sn.className = "sub-name";
+      sn.textContent = s.name;
+      var sc = document.createElement("span");
+      sc.className = "sub-count";
+      sc.textContent = fmtCount(s.count);
+      label.appendChild(sn);
+      label.appendChild(sc);
+      row.appendChild(label);
+
+      var track = document.createElement("div");
+      track.className = "track";
+      track.tabIndex = 0;
+      var fill = document.createElement("div");
+      fill.className = "fill";
+      fill.style.width = (s.count / maxSub * 100).toFixed(1) + "%";
+      fill.style.background = "var(--" + d.key + ")";
+      track.appendChild(fill);
+      row.appendChild(track);
+
+      function onMove(evt) {
+        showTooltip(evt, d.name + " → " + s.name, fmtCount(s.count) + " rows", "Total value: " + fmtMoney(s.value));
+      }
+      track.addEventListener("pointermove", onMove);
+      track.addEventListener("focus", function (evt) { showTooltip(evt, d.name + " → " + s.name, fmtCount(s.count) + " rows", "Total value: " + fmtMoney(s.value)); });
+      track.addEventListener("pointerleave", hideTooltip);
+      track.addEventListener("blur", hideTooltip);
+
+      body.appendChild(row);
+    });
+
+    panel.appendChild(body);
+    panelsEl.appendChild(panel);
+  });
+
+  // ---- Table view ----
+  var tbody = document.querySelector("#data-table tbody");
+  DATA.slice().sort(function (a, b) { return b.count - a.count; }).forEach(function (d) {
+    d.subs.slice().sort(function (a, b) { return b.count - a.count; }).forEach(function (s, i) {
+      var tr = document.createElement("tr");
+      var tdMajor = document.createElement("td");
+      tdMajor.textContent = i === 0 ? d.name : "";
+      var tdSub = document.createElement("td");
+      tdSub.textContent = s.name;
+      var tdCount = document.createElement("td");
+      tdCount.className = "num";
+      tdCount.textContent = fmtCount(s.count);
+      var tdPct = document.createElement("td");
+      tdPct.className = "num";
+      tdPct.textContent = (s.count / TOTAL_ROWS * 100).toFixed(1) + "%";
+      var tdVal = document.createElement("td");
+      tdVal.className = "num";
+      tdVal.textContent = fmtMoney(s.value);
+      tr.appendChild(tdMajor);
+      tr.appendChild(tdSub);
+      tr.appendChild(tdCount);
+      tr.appendChild(tdPct);
+      tr.appendChild(tdVal);
+      tbody.appendChild(tr);
+    });
+  });
+
+  var toggleBtn = document.getElementById("table-toggle");
+  var chartView = document.getElementById("chart-view");
+  var tableView = document.getElementById("table-view");
+  var showingTable = false;
+  toggleBtn.addEventListener("click", function () {
+    showingTable = !showingTable;
+    chartView.style.display = showingTable ? "none" : "";
+    tableView.style.display = showingTable ? "" : "none";
+    toggleBtn.textContent = showingTable ? "Show as chart" : "Show as table";
+  });
+})();
+</script>
