@@ -77,11 +77,8 @@ def run_glue_job(job_name, poll_seconds=10):
     print(f"--- {job_name} SUCCEEDED ---")
 
 
-def run_ddl_file(path, poll_seconds=2):
-    with open(path) as f:
-        sql = f.read()
-
-    print(f"\n--- Running DDL: {path} ---")
+def run_query(sql, label, poll_seconds=2):
+    print(f"\n--- Running: {label} ---")
     resp = athena.start_query_execution(
         QueryString=sql,
         QueryExecutionContext={"Database": ATHENA_DATABASE},
@@ -98,9 +95,22 @@ def run_ddl_file(path, poll_seconds=2):
 
     if state != "SUCCEEDED":
         reason = status["QueryExecution"]["Status"].get("StateChangeReason", "unknown error")
-        raise RuntimeError(f"DDL {path} FAILED: {reason}")
+        raise RuntimeError(f"{label} FAILED: {reason}")
 
-    print(f"--- DDL {path} SUCCEEDED ---")
+    print(f"--- {label} SUCCEEDED ---")
+
+
+def run_ddl_file(table_name, path, poll_seconds=2):
+    # DROP first rather than relying on the DDL's own `CREATE TABLE IF NOT
+    # EXISTS`: if a table by this name already exists pointing at the wrong
+    # S3 location (e.g. left over from manual/earlier setup), IF NOT EXISTS
+    # silently no-ops and the stale definition keeps shadowing this table
+    # forever. Dropping first guarantees the table always matches this DDL.
+    run_query(f"DROP TABLE IF EXISTS {table_name}", f"DROP TABLE IF EXISTS {table_name}", poll_seconds)
+
+    with open(path) as f:
+        sql = f.read()
+    run_query(sql, f"DDL {path}", poll_seconds)
 
 
 def main():
@@ -109,7 +119,7 @@ def main():
         run_glue_job(GLUE_JOB_NAMES["clean_data_import"])
 
         for table_name, ddl_path in DDL_STATEMENTS:
-            run_ddl_file(ddl_path)
+            run_ddl_file(table_name, ddl_path)
 
         run_glue_job(GLUE_JOB_NAMES["charge_type"])
         run_glue_job(GLUE_JOB_NAMES["build_charge_categorized"])
