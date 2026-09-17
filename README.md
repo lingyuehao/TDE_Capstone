@@ -40,7 +40,11 @@ or done by hand.
    per import batch. Writes to `curated/data_import_lookup/`.
 4. **DDL** (`sql/02_charge_raw_clean.sql`, `sql/04_data_import_lookup.sql`,
    `sql/05_charge_mapping.sql`) -- registers the Athena tables over the
-   cleaned files. Run once; safe to re-run (`CREATE TABLE IF NOT EXISTS`).
+   cleaned files. `orchestrate.py` drops each table before recreating it
+   from its DDL file, rather than relying on `CREATE TABLE IF NOT EXISTS`
+   -- a table that already exists (e.g. left over from earlier manual
+   setup, possibly pointing at the wrong S3 location) would otherwise
+   silently block the real DDL from ever taking effect.
 5. **`glue_jobs/charge_type.py`** -- reads `charge_raw_clean`, gets unique
    `(charge_type, charge_description)` combinations, classifies each
    using the shared taxonomy (`src/taxonomy.py`) -- rule-based regex
@@ -74,10 +78,33 @@ This assumes:
   `charge-type`, `build-charge-categorized`, `dashboard`) -- this script
   triggers runs of existing jobs, it doesn't create them
 
-## Glue job setup (one-time, per job)
+## Glue job setup (one-time, or whenever a script changes)
 
-Each job needs its script uploaded and its job parameters set. All of
-them are **Python Shell** jobs.
+`setup_aws.py` does this end-to-end via `boto3` -- no console clicking:
+uploads every `glue_jobs/*.py` script plus `src/taxonomy.py` to
+`s3://capstone-tde-demo/code/`, then creates (or updates, if they already
+exist) all 5 Glue jobs with the right script location, job parameters,
+and IAM role.
+
+```bash
+python setup_aws.py
+```
+
+This is separate from `orchestrate.py` on purpose: `orchestrate.py`
+*triggers runs* of jobs that already exist; `setup_aws.py` *creates/updates
+the jobs themselves*. Run `setup_aws.py` first (and again any time a Glue
+job script or the taxonomy changes), then `orchestrate.py` to execute the
+pipeline.
+
+Before running it, edit `GLUE_ROLE_ARN` near the top of `setup_aws.py` to
+your account's Glue execution role -- that role needs S3 read/write on
+the bucket and Athena access (for `build_charge_categorized.py` and
+`dashboard.py`, which call the Athena API at runtime). Setup does not
+create IAM roles/policies; those are account-security-sensitive and worth
+setting up deliberately.
+
+All 5 jobs are **Python Shell** jobs. For reference, here's what
+`setup_aws.py` configures for each:
 
 | Job name | Script | Job parameters | Extra |
 |---|---|---|---|
@@ -87,12 +114,10 @@ them are **Python Shell** jobs.
 | `build-charge-categorized` | `glue_jobs/build_charge_categorized.py` | `--ATHENA_DATABASE`, `--ATHENA_OUTPUT_S3`, `--CATEGORIZED_S3_PATH`, `--RAW_TABLE`, `--MAPPING_TABLE`, `--OUTPUT_TABLE` | -- |
 | `dashboard` | `glue_jobs/dashboard.py` | `--ATHENA_DATABASE`, `--ATHENA_OUTPUT_S3`, `--SUMMARY_S3_PATH` | -- |
 
-`src/taxonomy.py` must be uploaded to S3 separately (e.g.
-`s3://capstone-tde-demo/code/taxonomy.py`) and attached to the
-`charge-type` job via `--extra-py-files` -- that's what makes
-`from taxonomy import ...` resolve inside that job, and keeps the
-taxonomy as a single source of truth instead of copy-pasted into the job
-script.
+`src/taxonomy.py` is uploaded to S3 by `setup_aws.py` and attached to the
+`charge-type` job via `--extra-py-files` -- that's what makes `from
+taxonomy import ...` resolve inside that job, and keeps the taxonomy as a
+single source of truth instead of copy-pasted into the job script.
 
 ## S3 layout
 
@@ -117,7 +142,7 @@ s3://capstone-tde-demo/
 ## Changing the taxonomy
 
 1. Edit `src/taxonomy.py`
-2. Re-upload it to `s3://capstone-tde-demo/code/taxonomy.py`
+2. Run `setup_aws.py` to re-upload it to `s3://capstone-tde-demo/code/taxonomy.py`
 3. Run `orchestrate.py` (or just the `charge-type` ->
    `build-charge-categorized` -> `dashboard` jobs, in that order)
 
