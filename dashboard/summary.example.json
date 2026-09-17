@@ -1,0 +1,1923 @@
+{
+  "generated_at": "2026-09-17T15:35:28Z",
+  "total_transactions": 256766,
+  "categories": [
+    {
+      "name": "Accessorial / Delivery Surcharge",
+      "row_count": 20155,
+      "total_value": 482314.5,
+      "subs": [
+        {
+          "name": "Additional Handling",
+          "row_count": 1790,
+          "total_value": 148365.16
+        },
+        {
+          "name": "Wait Time / Mileage / Toll",
+          "row_count": 2690,
+          "total_value": 110631.69
+        },
+        {
+          "name": "Delivery Area Surcharge (DAS)",
+          "row_count": 6753,
+          "total_value": 94552.66
+        },
+        {
+          "name": "Demand / Peak Surcharge",
+          "row_count": 1399,
+          "total_value": 53070.72
+        },
+        {
+          "name": "Residential Delivery/Surcharge",
+          "row_count": 4722,
+          "total_value": 23743.67
+        },
+        {
+          "name": "Security Surcharge",
+          "row_count": 412,
+          "total_value": 18050.6
+        },
+        {
+          "name": "Saturday / After Hours / Holiday",
+          "row_count": 734,
+          "total_value": 14587.59
+        },
+        {
+          "name": "Address Correction",
+          "row_count": 848,
+          "total_value": 12477.5
+        },
+        {
+          "name": "Signature Required",
+          "row_count": 803,
+          "total_value": 6718.75
+        },
+        {
+          "name": "Commercial / Business Delivery Surcharge",
+          "row_count": 4,
+          "total_value": 116.16
+        }
+      ]
+    },
+    {
+      "name": "Administrative & Service Fees",
+      "row_count": 11402,
+      "total_value": 233533.01,
+      "subs": [
+        {
+          "name": "Pickup Service",
+          "row_count": 652,
+          "total_value": 70954.49
+        },
+        {
+          "name": "Package Handling / Storage",
+          "row_count": 103,
+          "total_value": 46202.65
+        },
+        {
+          "name": "Billing Adjustment / Correction",
+          "row_count": 5385,
+          "total_value": 40890.8
+        },
+        {
+          "name": "Third Party Billing",
+          "row_count": 918,
+          "total_value": 15163.44
+        },
+        {
+          "name": "Disbursement Fee",
+          "row_count": 554,
+          "total_value": 13059.5
+        },
+        {
+          "name": "Sustainability / Carbon Fee",
+          "row_count": 2409,
+          "total_value": 13016.75
+        },
+        {
+          "name": "Document Fee",
+          "row_count": 337,
+          "total_value": 11778.44
+        },
+        {
+          "name": "Declared Value / Insurance",
+          "row_count": 229,
+          "total_value": 9805.41
+        },
+        {
+          "name": "Chargeback / Reversal",
+          "row_count": 481,
+          "total_value": 6678.52
+        },
+        {
+          "name": "Returns / Print Label Fee",
+          "row_count": 334,
+          "total_value": 5983.01
+        }
+      ]
+    },
+    {
+      "name": "Credits",
+      "row_count": 7,
+      "total_value": -1695.99,
+      "subs": [
+        {
+          "name": "Credit From Carrier",
+          "row_count": 7,
+          "total_value": -1695.99
+        }
+      ]
+    },
+    {
+      "name": "Discounts",
+      "row_count": 71098,
+      "total_value": -4165897.11,
+      "subs": [
+        {
+          "name": "Grace Discount",
+          "row_count": 11814,
+          "total_value": -228506.64
+        },
+        {
+          "name": "Earned Discount",
+          "row_count": 22904,
+          "total_value": -375705.98
+        },
+        {
+          "name": "General Discount",
+          "row_count": 36380,
+          "total_value": -3561684.49
+        }
+      ]
+    },
+    {
+      "name": "Fuel Surcharge",
+      "row_count": 74071,
+      "total_value": 680160.6,
+      "subs": [
+        {
+          "name": "Domestic Fuel Surcharge",
+          "row_count": 67043,
+          "total_value": 651965.62
+        },
+        {
+          "name": "Fuel Surcharge Correction",
+          "row_count": 5569,
+          "total_value": 17229.02
+        },
+        {
+          "name": "International Fuel Surcharge",
+          "row_count": 1119,
+          "total_value": 9857.14
+        },
+        {
+          "name": "Chargeback Fuel Surcharge",
+          "row_count": 340,
+          "total_value": 1108.82
+        }
+      ]
+    },
+    {
+      "name": "Line Haul / Base Transportation",
+      "row_count": 68357,
+      "total_value": 7542082.9,
+      "subs": [
+        {
+          "name": "General / Mode Not Specified",
+          "row_count": 43259,
+          "total_value": 6100223.12
+        },
+        {
+          "name": "Air Freight",
+          "row_count": 2049,
+          "total_value": 796589.67
+        },
+        {
+          "name": "International / Export / Import Freight",
+          "row_count": 4959,
+          "total_value": 375002.25
+        },
+        {
+          "name": "Ground",
+          "row_count": 18067,
+          "total_value": 256563.56
+        },
+        {
+          "name": "Ocean Freight",
+          "row_count": 23,
+          "total_value": 13704.3
+        }
+      ]
+    },
+    {
+      "name": "Other / Uncategorized",
+      "row_count": 4081,
+      "total_value": 651657.75,
+      "subs": [
+        {
+          "name": "Unclassified",
+          "row_count": 4081,
+          "total_value": 651657.75
+        }
+      ]
+    },
+    {
+      "name": "Taxes & Customs",
+      "row_count": 7595,
+      "total_value": 355568.69,
+      "subs": [
+        {
+          "name": "Duty & Import Tax",
+          "row_count": 578,
+          "total_value": 169600.09
+        },
+        {
+          "name": "Customs / Brokerage",
+          "row_count": 1475,
+          "total_value": 80919.8
+        },
+        {
+          "name": "VAT",
+          "row_count": 4279,
+          "total_value": 54524.71
+        },
+        {
+          "name": "GST / HST",
+          "row_count": 1065,
+          "total_value": 28338.49
+        },
+        {
+          "name": "Sales / General Tax",
+          "row_count": 198,
+          "total_value": 22185.6
+        }
+      ]
+    }
+  ],
+  "companies": [
+    {
+      "name": "Unspecified account",
+      "row_count": 143701,
+      "total_value": 807438.2,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 40377,
+          "total_value": 1649233.07
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 45042,
+          "total_value": 135836.84
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 7544,
+          "total_value": 49845.7
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 1832,
+          "total_value": 30502.41
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 5112,
+          "total_value": 27195.03
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 171,
+          "total_value": 10759.71
+        },
+        {
+          "name": "Discounts",
+          "row_count": 43623,
+          "total_value": -1095934.56
+        }
+      ]
+    },
+    {
+      "name": "BELIMO US, Inc.",
+      "row_count": 10938,
+      "total_value": 866454.03,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 3576,
+          "total_value": 936270.3
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 4349,
+          "total_value": 208802.35
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 917,
+          "total_value": 183455.39
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 770,
+          "total_value": 48877.53
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 211,
+          "total_value": 24298.58
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 575,
+          "total_value": 18404.31
+        },
+        {
+          "name": "Discounts",
+          "row_count": 540,
+          "total_value": -553654.43
+        }
+      ]
+    },
+    {
+      "name": "CooperSurgical, Inc. Parcel",
+      "row_count": 38949,
+      "total_value": 454528.53,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 9683,
+          "total_value": 1014492.54
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 10670,
+          "total_value": 66535.84
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 3172,
+          "total_value": 53194.2
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 1687,
+          "total_value": 26342.26
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 309,
+          "total_value": 14122.14
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 394,
+          "total_value": 14004.51
+        },
+        {
+          "name": "Discounts",
+          "row_count": 13034,
+          "total_value": -734162.96
+        }
+      ]
+    },
+    {
+      "name": "CooperSurgical Inc.",
+      "row_count": 2226,
+      "total_value": 1223392.33,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 479,
+          "total_value": 1083630.37
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 623,
+          "total_value": 221492.25
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 222,
+          "total_value": 78965.71
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 328,
+          "total_value": 61292.31
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 274,
+          "total_value": 48138.58
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 110,
+          "total_value": 11913.89
+        },
+        {
+          "name": "Credits",
+          "row_count": 4,
+          "total_value": 1768.51
+        },
+        {
+          "name": "Discounts",
+          "row_count": 186,
+          "total_value": -283809.29
+        }
+      ]
+    },
+    {
+      "name": "California Cryobank USD",
+      "row_count": 9991,
+      "total_value": 119937.56,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 2247,
+          "total_value": 736572.65
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 2318,
+          "total_value": 12770.24
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 749,
+          "total_value": 8443.89
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 72,
+          "total_value": 6118.13
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 127,
+          "total_value": 5888.55
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 200,
+          "total_value": 3293.78
+        },
+        {
+          "name": "Discounts",
+          "row_count": 4278,
+          "total_value": -653149.68
+        }
+      ]
+    },
+    {
+      "name": "CooperGenomics",
+      "row_count": 13979,
+      "total_value": 294616.16,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 3369,
+          "total_value": 442606.69
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 1844,
+          "total_value": 31519.1
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 3155,
+          "total_value": 24993.72
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 652,
+          "total_value": 13420.77
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 121,
+          "total_value": 6201.77
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 85,
+          "total_value": 366.44
+        },
+        {
+          "name": "Discounts",
+          "row_count": 4753,
+          "total_value": -224492.33
+        }
+      ]
+    },
+    {
+      "name": "Cord Blood Registry",
+      "row_count": 16590,
+      "total_value": 462721.27,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 3487,
+          "total_value": 321222.47
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 4483,
+          "total_value": 107871.62
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 559,
+          "total_value": 83323.58
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 3511,
+          "total_value": 45783.07
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 612,
+          "total_value": 40863.31
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 369,
+          "total_value": 3928.66
+        },
+        {
+          "name": "Discounts",
+          "row_count": 3569,
+          "total_value": -140271.44
+        }
+      ]
+    },
+    {
+      "name": "New Light Enterprises Inc.",
+      "row_count": 716,
+      "total_value": 308902.58,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 332,
+          "total_value": 479319.8
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 76,
+          "total_value": 22734.12
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 150,
+          "total_value": 10637.81
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 45,
+          "total_value": 2726.46
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 3,
+          "total_value": 115.0
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 4,
+          "total_value": 95.0
+        },
+        {
+          "name": "Discounts",
+          "row_count": 106,
+          "total_value": -206725.61
+        }
+      ]
+    },
+    {
+      "name": "CooperSurgical Distribution BV",
+      "row_count": 12835,
+      "total_value": 473852.62,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 3497,
+          "total_value": 321902.25
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 3339,
+          "total_value": 39401.55
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 692,
+          "total_value": 35538.48
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 2749,
+          "total_value": 31661.96
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 430,
+          "total_value": 26609.61
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 2097,
+          "total_value": 26308.39
+        },
+        {
+          "name": "Credits",
+          "row_count": 2,
+          "total_value": -3559.5
+        },
+        {
+          "name": "Discounts",
+          "row_count": 29,
+          "total_value": -4010.12
+        }
+      ]
+    },
+    {
+      "name": "CTDI",
+      "row_count": 1132,
+      "total_value": 169914.95,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 323,
+          "total_value": 136242.92
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 393,
+          "total_value": 59729.12
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 43,
+          "total_value": 25342.12
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 97,
+          "total_value": 23641.93
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 15,
+          "total_value": 2226.43
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 14,
+          "total_value": 1001.91
+        },
+        {
+          "name": "Discounts",
+          "row_count": 247,
+          "total_value": -78269.48
+        }
+      ]
+    },
+    {
+      "name": "MM Clayton LLC",
+      "row_count": 446,
+      "total_value": 119268.3,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 175,
+          "total_value": 122933.05
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 37,
+          "total_value": 28160.49
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 18,
+          "total_value": 16130.97
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 155,
+          "total_value": 15619.14
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 13,
+          "total_value": 9137.59
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 27,
+          "total_value": 2483.86
+        },
+        {
+          "name": "Discounts",
+          "row_count": 21,
+          "total_value": -75196.8
+        }
+      ]
+    },
+    {
+      "name": "Donar Egg Bank",
+      "row_count": 1521,
+      "total_value": 23476.48,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 326,
+          "total_value": 106500.81
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 80,
+          "total_value": 8002.45
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 333,
+          "total_value": 1783.02
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 120,
+          "total_value": 582.88
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 63,
+          "total_value": 457.48
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 14,
+          "total_value": 234.47
+        },
+        {
+          "name": "Discounts",
+          "row_count": 585,
+          "total_value": -94084.63
+        }
+      ]
+    },
+    {
+      "name": "Cooper Medical Costa Rica",
+      "row_count": 587,
+      "total_value": 205091.09,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 67,
+          "total_value": 106232.47
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 190,
+          "total_value": 28978.57
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 116,
+          "total_value": 25803.99
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 118,
+          "total_value": 22442.12
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 93,
+          "total_value": 19855.58
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 2,
+          "total_value": 1683.36
+        },
+        {
+          "name": "Credits",
+          "row_count": 1,
+          "total_value": 95.0
+        }
+      ]
+    },
+    {
+      "name": "CooperSurgical Inc Venlo",
+      "row_count": 417,
+      "total_value": 129549.69,
+      "categories": [
+        {
+          "name": "Taxes & Customs",
+          "row_count": 365,
+          "total_value": 117629.99
+        },
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 4,
+          "total_value": 9525.0
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 5,
+          "total_value": 1200.0
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 35,
+          "total_value": 875.0
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 8,
+          "total_value": 319.7
+        }
+      ]
+    },
+    {
+      "name": "Core Cryolab_CAD",
+      "row_count": 1077,
+      "total_value": 31150.86,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 201,
+          "total_value": 40425.44
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 266,
+          "total_value": 6431.07
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 241,
+          "total_value": 3134.55
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 201,
+          "total_value": 2744.4
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 30,
+          "total_value": 538.62
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 30,
+          "total_value": 115.71
+        },
+        {
+          "name": "Discounts",
+          "row_count": 108,
+          "total_value": -22238.93
+        }
+      ]
+    },
+    {
+      "name": "CooperSurgical, Inc. Customs",
+      "row_count": 1121,
+      "total_value": 50577.15,
+      "categories": [
+        {
+          "name": "Taxes & Customs",
+          "row_count": 633,
+          "total_value": 28661.34
+        },
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 79,
+          "total_value": 7628.08
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 122,
+          "total_value": 6227.22
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 158,
+          "total_value": 4763.27
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 109,
+          "total_value": 3141.28
+        },
+        {
+          "name": "Discounts",
+          "row_count": 18,
+          "total_value": 92.5
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 2,
+          "total_value": 63.46
+        }
+      ]
+    },
+    {
+      "name": "Core Cryolab USD",
+      "row_count": 170,
+      "total_value": 27882.95,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 59,
+          "total_value": 23244.27
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 57,
+          "total_value": 1498.48
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 12,
+          "total_value": 1405.0
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 12,
+          "total_value": 1033.56
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 30,
+          "total_value": 701.64
+        }
+      ]
+    },
+    {
+      "name": "COOPERSURGICAL CANADA INC. CAD",
+      "row_count": 241,
+      "total_value": 4529.57,
+      "categories": [
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 40,
+          "total_value": 1283.22
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 67,
+          "total_value": 890.79
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 67,
+          "total_value": 799.57
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 27,
+          "total_value": 738.76
+        },
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 11,
+          "total_value": 520.72
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 28,
+          "total_value": 285.86
+        },
+        {
+          "name": "Discounts",
+          "row_count": 1,
+          "total_value": 10.65
+        }
+      ]
+    },
+    {
+      "name": "CooperGenomics Canada",
+      "row_count": 129,
+      "total_value": 4440.03,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 65,
+          "total_value": 3580.0
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 15,
+          "total_value": 359.0
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 15,
+          "total_value": 280.02
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 34,
+          "total_value": 221.01
+        }
+      ]
+    }
+  ],
+  "other_companies_count": 0,
+  "other_companies_row_count": 0,
+  "other_companies_total_value": 0,
+  "carriers": [
+    {
+      "name": "FEDB",
+      "row_count": 62632,
+      "total_value": 472585.03,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 13927,
+          "total_value": 2209654.47
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 6151,
+          "total_value": 50896.88
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 14072,
+          "total_value": 50416.93
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 722,
+          "total_value": 32136.48
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 1043,
+          "total_value": 10989.2
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 269,
+          "total_value": 1371.48
+        },
+        {
+          "name": "Discounts",
+          "row_count": 26448,
+          "total_value": -1882880.41
+        }
+      ]
+    },
+    {
+      "name": "Unspecified carrier",
+      "row_count": 143701,
+      "total_value": 807438.2,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 40377,
+          "total_value": 1649233.07
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 45042,
+          "total_value": 135836.84
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 7544,
+          "total_value": 49845.7
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 1832,
+          "total_value": 30502.41
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 5112,
+          "total_value": 27195.03
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 171,
+          "total_value": 10759.71
+        },
+        {
+          "name": "Discounts",
+          "row_count": 43623,
+          "total_value": -1095934.56
+        }
+      ]
+    },
+    {
+      "name": "XPOL",
+      "row_count": 1194,
+      "total_value": 165039.76,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 321,
+          "total_value": 530895.95
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 319,
+          "total_value": 40264.43
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 111,
+          "total_value": 7408.13
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 123,
+          "total_value": 6831.07
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 23,
+          "total_value": 2931.62
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 2,
+          "total_value": 401.0
+        },
+        {
+          "name": "Discounts",
+          "row_count": 295,
+          "total_value": -423692.44
+        }
+      ]
+    },
+    {
+      "name": "EXP-I",
+      "row_count": 867,
+      "total_value": 756717.02,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 151,
+          "total_value": 627565.22
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 310,
+          "total_value": 57057.08
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 152,
+          "total_value": 38348.49
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 144,
+          "total_value": 20711.86
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 109,
+          "total_value": 11750.02
+        },
+        {
+          "name": "Credits",
+          "row_count": 1,
+          "total_value": 1284.35
+        }
+      ]
+    },
+    {
+      "name": "ARCB",
+      "row_count": 796,
+      "total_value": 64580.46,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 101,
+          "total_value": 169752.29
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 236,
+          "total_value": 126725.81
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 174,
+          "total_value": 15158.43
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 30,
+          "total_value": 6625.8
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 84,
+          "total_value": 4393.0
+        },
+        {
+          "name": "Discounts",
+          "row_count": 171,
+          "total_value": -258074.87
+        }
+      ]
+    },
+    {
+      "name": "UPS",
+      "row_count": 21409,
+      "total_value": 488266.15,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 6552,
+          "total_value": 260239.61
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 7982,
+          "total_value": 82700.09
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 2012,
+          "total_value": 41930.58
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 1761,
+          "total_value": 38141.77
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 2242,
+          "total_value": 34290.61
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 742,
+          "total_value": 29494.39
+        },
+        {
+          "name": "Discounts",
+          "row_count": 118,
+          "total_value": 1469.1
+        }
+      ]
+    },
+    {
+      "name": "ODFL",
+      "row_count": 350,
+      "total_value": 92429.46,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 58,
+          "total_value": 120648.68
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 78,
+          "total_value": 81347.92
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 23,
+          "total_value": 45141.71
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 123,
+          "total_value": 42778.9
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 4,
+          "total_value": 96.0
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 2,
+          "total_value": 80.0
+        },
+        {
+          "name": "Discounts",
+          "row_count": 62,
+          "total_value": -197663.75
+        }
+      ]
+    },
+    {
+      "name": "PYLE",
+      "row_count": 3144,
+      "total_value": 467796.55,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 928,
+          "total_value": 218989.09
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 698,
+          "total_value": 131810.78
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 1364,
+          "total_value": 113263.94
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 26,
+          "total_value": 6128.05
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 110,
+          "total_value": 5687.37
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 16,
+          "total_value": 749.05
+        },
+        {
+          "name": "Discounts",
+          "row_count": 2,
+          "total_value": -8831.73
+        }
+      ]
+    },
+    {
+      "name": "AIRS",
+      "row_count": 7546,
+      "total_value": 476875.77,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 1815,
+          "total_value": 176865.89
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 3038,
+          "total_value": 117973.38
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 592,
+          "total_value": 91112.49
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 1815,
+          "total_value": 50685.92
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 219,
+          "total_value": 37916.54
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 67,
+          "total_value": 2321.55
+        }
+      ]
+    },
+    {
+      "name": "GLOT",
+      "row_count": 198,
+      "total_value": 34420.04,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 79,
+          "total_value": 153238.81
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 47,
+          "total_value": 4585.13
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 16,
+          "total_value": 3445.57
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 10,
+          "total_value": 509.46
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 1,
+          "total_value": 5.0
+        },
+        {
+          "name": "Discounts",
+          "row_count": 45,
+          "total_value": -127363.93
+        }
+      ]
+    },
+    {
+      "name": "NEWL",
+      "row_count": 158,
+      "total_value": 219108.93,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 154,
+          "total_value": 225192.74
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 2,
+          "total_value": 605.4
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 1,
+          "total_value": 5.0
+        },
+        {
+          "name": "Discounts",
+          "row_count": 1,
+          "total_value": -6694.21
+        }
+      ]
+    },
+    {
+      "name": "ICAT",
+      "row_count": 1520,
+      "total_value": 193315.72,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 598,
+          "total_value": 164604.62
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 229,
+          "total_value": 10682.75
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 301,
+          "total_value": 8487.24
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 357,
+          "total_value": 7202.94
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 33,
+          "total_value": 1836.17
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 2,
+          "total_value": 502.0
+        }
+      ]
+    },
+    {
+      "name": "BTX",
+      "row_count": 144,
+      "total_value": 179541.87,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 77,
+          "total_value": 129504.04
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 4,
+          "total_value": 28813.0
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 37,
+          "total_value": 15528.65
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 20,
+          "total_value": 5502.58
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 6,
+          "total_value": 193.6
+        }
+      ]
+    },
+    {
+      "name": "ESTE",
+      "row_count": 221,
+      "total_value": 38322.72,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 66,
+          "total_value": 83847.08
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 32,
+          "total_value": 16749.87
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 68,
+          "total_value": 3164.07
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 19,
+          "total_value": 1035.0
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 2,
+          "total_value": 110.0
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 4,
+          "total_value": 95.0
+        },
+        {
+          "name": "Discounts",
+          "row_count": 30,
+          "total_value": -66678.3
+        }
+      ]
+    },
+    {
+      "name": "RLCA",
+      "row_count": 738,
+      "total_value": 84540.16,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 225,
+          "total_value": 61436.16
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 271,
+          "total_value": 23704.03
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 6,
+          "total_value": 12306.2
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 48,
+          "total_value": 8704.0
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 10,
+          "total_value": 552.91
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 7,
+          "total_value": 265.0
+        },
+        {
+          "name": "Discounts",
+          "row_count": 171,
+          "total_value": -22428.14
+        }
+      ]
+    },
+    {
+      "name": "PEGA-CR",
+      "row_count": 205,
+      "total_value": 127507.0,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 30,
+          "total_value": 81812.92
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 77,
+          "total_value": 17373.57
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 65,
+          "total_value": 16989.48
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 25,
+          "total_value": 9016.99
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 2,
+          "total_value": 1683.36
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 6,
+          "total_value": 630.68
+        }
+      ]
+    },
+    {
+      "name": "DHLE",
+      "row_count": 7718,
+      "total_value": 124261.33,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 1922,
+          "total_value": 72037.72
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 1919,
+          "total_value": 22478.24
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 1844,
+          "total_value": 17997.97
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 1796,
+          "total_value": 9761.4
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 206,
+          "total_value": 1180.0
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 31,
+          "total_value": 806.0
+        }
+      ]
+    },
+    {
+      "name": "FFWD",
+      "row_count": 154,
+      "total_value": 114619.32,
+      "categories": [
+        {
+          "name": "Taxes & Customs",
+          "row_count": 108,
+          "total_value": 102909.32
+        },
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 4,
+          "total_value": 9525.0
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 5,
+          "total_value": 1200.0
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 35,
+          "total_value": 875.0
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 2,
+          "total_value": 110.0
+        }
+      ]
+    },
+    {
+      "name": "FDFB",
+      "row_count": 100,
+      "total_value": 29418.73,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 16,
+          "total_value": 25871.07
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 31,
+          "total_value": 20856.17
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 17,
+          "total_value": 15940.68
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 6,
+          "total_value": 5029.79
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 5,
+          "total_value": 276.06
+        },
+        {
+          "name": "Discounts",
+          "row_count": 25,
+          "total_value": -38555.04
+        }
+      ]
+    },
+    {
+      "name": "SBA",
+      "row_count": 77,
+      "total_value": 83205.51,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 48,
+          "total_value": 76777.98
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 29,
+          "total_value": 6427.53
+        }
+      ]
+    },
+    {
+      "name": "CRAN-I",
+      "row_count": 133,
+      "total_value": 70519.3,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 45,
+          "total_value": 50174.27
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 48,
+          "total_value": 8255.28
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 20,
+          "total_value": 6428.06
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 19,
+          "total_value": 4779.92
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 1,
+          "total_value": 881.77
+        }
+      ]
+    },
+    {
+      "name": "DHLF-V",
+      "row_count": 316,
+      "total_value": 70058.91,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 54,
+          "total_value": 49226.38
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 153,
+          "total_value": 12091.11
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 30,
+          "total_value": 3750.55
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 29,
+          "total_value": 2187.55
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 6,
+          "total_value": 1436.11
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 44,
+          "total_value": 1367.21
+        }
+      ]
+    },
+    {
+      "name": "EXP-CR",
+      "row_count": 377,
+      "total_value": 64714.54,
+      "categories": [
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 86,
+          "total_value": 18829.9
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 91,
+          "total_value": 16787.0
+        },
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 35,
+          "total_value": 12250.0
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 112,
+          "total_value": 11350.0
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 52,
+          "total_value": 5402.64
+        },
+        {
+          "name": "Credits",
+          "row_count": 1,
+          "total_value": 95.0
+        }
+      ]
+    },
+    {
+      "name": "DHL",
+      "row_count": 670,
+      "total_value": 64500.66,
+      "categories": [
+        {
+          "name": "Line Haul / Base Transportation",
+          "row_count": 144,
+          "total_value": 36729.16
+        },
+        {
+          "name": "Fuel Surcharge",
+          "row_count": 144,
+          "total_value": 13956.43
+        },
+        {
+          "name": "Taxes & Customs",
+          "row_count": 106,
+          "total_value": 11072.88
+        },
+        {
+          "name": "Administrative & Service Fees",
+          "row_count": 179,
+          "total_value": 1770.19
+        },
+        {
+          "name": "Other / Uncategorized",
+          "row_count": 95,
+          "total_value": 912.0
+        },
+        {
+          "name": "Accessorial / Delivery Surcharge",
+          "row_count": 2,
+          "total_value": 60.0
+        }
+      ]
+    }
+  ],
+  "other_carriers_count": 38,
+  "other_carriers_row_count": 2398,
+  "other_carriers_total_value": 487941.21
+}

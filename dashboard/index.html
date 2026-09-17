@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Charge Category Map</title>
+<style>
+.viz-root {
+  color-scheme: light;
+  --surface-1:      #fcfcfb;
+  --page:           #f9f9f7;
+  --text-primary:   #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted:     #898781;
+  --grid:           #e1e0d9;
+  --baseline:       #c3c2b7;
+  --border:         rgba(11,11,11,0.10);
+  --track:          #f0efec;
+  --cat-other: #898781;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) .viz-root {
+    color-scheme: dark;
+    --surface-1:      #1a1a19;
+    --page:           #0d0d0d;
+    --text-primary:   #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted:     #898781;
+    --grid:           #2c2c2a;
+    --baseline:       #383835;
+    --border:         rgba(255,255,255,0.10);
+    --track:          #232322;
+    --cat-other: #898781;
+  }
+}
+:root[data-theme="dark"] .viz-root {
+  color-scheme: dark;
+  --surface-1:      #1a1a19;
+  --page:           #0d0d0d;
+  --text-primary:   #ffffff;
+  --text-secondary: #c3c2b7;
+  --text-muted:     #898781;
+  --grid:           #2c2c2a;
+  --baseline:       #383835;
+  --border:         rgba(255,255,255,0.10);
+  --track:          #232322;
+  --cat-other: #898781;
+}
+
+* { box-sizing: border-box; }
+.viz-root {
+  background: var(--page);
+  color: var(--text-primary);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  padding: 24px 16px 48px;
+  min-height: 100vh;
+}
+.wrap { max-width: 980px; margin: 0 auto; }
+
+h1 { font-size: 21px; font-weight: 650; margin: 0 0 4px; }
+.subtitle { font-size: 14px; color: var(--text-secondary); margin: 0 0 20px; max-width: 640px; line-height: 1.5; }
+
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.kpi {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.kpi .label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+.kpi .value { font-size: 22px; font-weight: 650; font-variant-numeric: proportional-nums; }
+
+.card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 18px 8px;
+  margin-bottom: 20px;
+}
+.card h2 { font-size: 14px; font-weight: 650; margin: 0 0 2px; }
+.card .card-sub { font-size: 12px; color: var(--text-muted); margin: 0 0 14px; }
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 7px 0;
+  position: relative;
+}
+.bar-row .swatch { width: 10px; height: 10px; border-radius: 2px; flex: none; }
+.bar-row .name { font-size: 13px; width: 190px; flex: none; color: var(--text-primary); }
+.bar-row .track {
+  flex: 1 1 auto; height: 20px; background: var(--track);
+  border-radius: 4px; position: relative; overflow: hidden; cursor: pointer;
+}
+.bar-row .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; transition: filter 0.1s, width 700ms cubic-bezier(0.22,1,0.36,1); }
+.bar-row .track:hover .fill, .bar-row .track:focus-visible .fill { filter: brightness(1.08); }
+.bar-row .figs { width: 148px; flex: none; text-align: right; font-size: 12px; }
+.bar-row .figs .pct { color: var(--text-primary); font-weight: 600; }
+.bar-row .figs .amt { color: var(--text-muted); margin-left: 6px; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+.panel { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.panel .accent { height: 4px; }
+.panel .panel-body { padding: 14px 16px 14px; }
+.panel .panel-title {
+  display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px;
+  cursor: pointer; user-select: none;
+}
+.panel .panel-title:hover .name { color: var(--text-primary); }
+.panel .panel-title .name { font-size: 13px; font-weight: 650; display: flex; align-items: center; gap: 6px; }
+.panel .panel-title .chevron {
+  font-size: 9px; color: var(--text-muted); transition: transform 200ms ease;
+  display: inline-block;
+}
+.panel.expanded .panel-title .chevron { transform: rotate(90deg); }
+.panel .panel-title .total { font-size: 11px; color: var(--text-muted); }
+
+.panel-detail {
+  max-height: 0; overflow: hidden; transition: max-height 260ms ease;
+}
+.panel.expanded .panel-detail { max-height: 600px; }
+.panel-detail-inner { padding-top: 4px; border-top: 1px solid var(--grid); margin-top: 2px; }
+.panel-detail table { width: 100%; border-collapse: collapse; font-size: 11px; }
+.panel-detail th, .panel-detail td { text-align: left; padding: 5px 4px; }
+.panel-detail th { color: var(--text-muted); font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 0.02em; }
+.panel-detail td.num, .panel-detail th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.panel-detail tr + tr td { border-top: 1px solid var(--grid); }
+
+.sub-row { margin-bottom: 9px; }
+.sub-row .sub-label { display: flex; justify-content: space-between; align-items: baseline; font-size: 11.5px; margin-bottom: 3px; }
+.sub-row .sub-name { color: var(--text-secondary); }
+.sub-row .sub-count { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.sub-row .track { height: 8px; background: var(--track); border-radius: 4px; overflow: hidden; cursor: pointer; }
+.sub-row .fill { height: 100%; border-radius: 4px; transition: width 700ms cubic-bezier(0.22,1,0.36,1); }
+
+.tt {
+  position: fixed; pointer-events: none; background: var(--surface-1);
+  border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px;
+  font-size: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.18); z-index: 50;
+  opacity: 0; transition: opacity 0.08s; max-width: 240px;
+}
+.tt.show { opacity: 1; }
+.tt .tt-val { font-weight: 650; color: var(--text-primary); font-size: 13px; }
+.tt .tt-key { color: var(--text-muted); margin-top: 2px; }
+
+.toggle-row { display: flex; justify-content: flex-end; margin: -8px 0 14px; }
+.toggle-btn {
+  font-size: 12px; color: var(--text-secondary); background: var(--surface-1);
+  border: 1px solid var(--border); border-radius: 7px; padding: 5px 10px; cursor: pointer;
+  font-family: inherit;
+}
+.toggle-btn:hover { color: var(--text-primary); }
+
+table.data-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+table.data-table th, table.data-table td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--grid); }
+table.data-table th { color: var(--text-muted); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.02em; }
+table.data-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.data-table tr:last-child td { border-bottom: none; }
+.table-wrap { overflow-x: auto; }
+
+.nav-tabs { display: flex; gap: 6px; margin-bottom: 20px; border-bottom: 1px solid var(--border); }
+.tab-btn {
+  font-family: inherit; font-size: 13.5px; font-weight: 600; color: var(--text-muted);
+  background: none; border: none; padding: 9px 4px; margin-right: 18px; cursor: pointer;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+}
+.tab-btn.active { color: var(--text-primary); border-bottom-color: #185fa5; }
+.tab-btn:hover { color: var(--text-primary); }
+.page { display: none; }
+.page.active { display: block; }
+
+.entity-select-row { margin-bottom: 20px; }
+.entity-select-row label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+.entity-select-row select {
+  font-family: inherit; font-size: 14px; font-weight: 600; color: var(--text-primary);
+  background: var(--surface-1); border: 1px solid var(--border); border-radius: 8px;
+  padding: 8px 12px; min-width: 240px; cursor: pointer;
+}
+
+.entity-detail-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; align-items: start; }
+@media (max-width: 640px) { .entity-detail-grid { grid-template-columns: 1fr; } }
+.ring-card { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.ring-card .ring { width: 160px; height: 160px; margin: 6px 0 14px; }
+.ring-total { font-size: 15px; font-weight: 650; fill: var(--text-primary); }
+.ring-sub { font-size: 9px; fill: var(--text-muted); }
+
+.ring-legend { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+.legend-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--text-secondary); text-align: left; }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.legend-label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.legend-amt { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+
+.foot-note { font-size: 12px; color: var(--text-muted); line-height: 1.6; margin-top: -4px; }
+
+.state { color: var(--text-muted); font-size: 13px; padding: 30px 0; }
+
+@media (max-width: 520px) {
+  .bar-row .name { width: 108px; font-size: 12px; }
+  .bar-row .figs { width: 100px; }
+  .bar-row .figs .amt { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="viz-root">
+  <div class="wrap">
+    <h1>Charge Category Map</h1>
+    <p class="subtitle" id="subtitle">Loading current data&hellip;</p>
+
+    <div class="nav-tabs">
+      <button class="tab-btn active" data-page="overview" type="button">Overview</button>
+      <button class="tab-btn" data-page="company" type="button" id="company-tab-btn" style="display:none;">By company</button>
+      <button class="tab-btn" data-page="carrier" type="button" id="carrier-tab-btn" style="display:none;">By carrier</button>
+    </div>
+
+    <div class="page active" id="page-overview">
+      <div class="kpi-row">
+        <div class="kpi"><div class="label">Charge line items</div><div class="value" id="kpi-rows">—</div></div>
+        <div class="kpi"><div class="label">Gross charges</div><div class="value" id="kpi-gross">—</div></div>
+        <div class="kpi"><div class="label">Auto-categorized</div><div class="value" id="kpi-coverage">—</div></div>
+      </div>
+
+      <div class="card">
+        <h2>Major categories, by share of charge lines</h2>
+        <p class="card-sub">Bar length = share of all charge lines. Hover a bar for the total $ value.</p>
+        <div id="top-chart"><div class="state">Loading&hellip;</div></div>
+      </div>
+
+      <div class="toggle-row">
+        <button class="toggle-btn" id="table-toggle" type="button">Show as table</button>
+      </div>
+
+      <div id="chart-view">
+        <div class="grid" id="panels"></div>
+      </div>
+
+      <div id="table-view" class="card" style="display:none;">
+        <h2>Full breakdown</h2>
+        <p class="card-sub">Every major category and subcategory, with row counts and total $ value.</p>
+        <div class="table-wrap">
+          <table class="data-table" id="data-table">
+            <thead>
+              <tr><th>Major category</th><th>Subcategory</th><th class="num">Rows</th><th class="num">% of rows</th><th class="num">Total value</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <p class="foot-note" id="footnote"></p>
+    </div>
+
+    <div class="page" id="page-company">
+      <div class="entity-select-row">
+        <label for="company-select">Company</label>
+        <select id="company-select"></select>
+      </div>
+
+      <div class="kpi-row" id="company-kpi-row"></div>
+
+      <div class="entity-detail-grid">
+        <div class="card">
+          <h2>Charges by category</h2>
+          <p class="card-sub">Same bar chart as the overview, scoped to this company.</p>
+          <div id="company-bars"></div>
+        </div>
+        <div class="card ring-card">
+          <h2 style="align-self:flex-start;">Composition</h2>
+          <p class="card-sub" style="align-self:flex-start;">Share of this company's charges, by category.</p>
+          <div id="company-ring-holder"></div>
+          <div class="ring-legend" id="company-ring-legend"></div>
+        </div>
+      </div>
+
+      <p class="foot-note" id="company-note"></p>
+    </div>
+
+    <div class="page" id="page-carrier">
+      <div class="entity-select-row">
+        <label for="carrier-select">Carrier</label>
+        <select id="carrier-select"></select>
+      </div>
+
+      <div class="kpi-row" id="carrier-kpi-row"></div>
+
+      <div class="entity-detail-grid">
+        <div class="card">
+          <h2>Charges by category</h2>
+          <p class="card-sub">Same bar chart as the overview, scoped to this carrier.</p>
+          <div id="carrier-bars"></div>
+        </div>
+        <div class="card ring-card">
+          <h2 style="align-self:flex-start;">Composition</h2>
+          <p class="card-sub" style="align-self:flex-start;">Share of this carrier's charges, by category.</p>
+          <div id="carrier-ring-holder"></div>
+          <div class="ring-legend" id="carrier-ring-legend"></div>
+        </div>
+      </div>
+
+      <p class="foot-note" id="carrier-note"></p>
+    </div>
+  </div>
+</div>
+
+<div class="tt" id="tooltip"></div>
+
+<script>
+(function () {
+  var PALETTE = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#7b5ea7", "#3aa0a0"];
+  var PALETTE_DARK = ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#008300", "#9376c4", "#4bb8b8"];
+  var MUTED_NAME = "Other / Uncategorized";
+
+  function fmtMoney(v) {
+    var sign = v < 0 ? "-" : "";
+    var abs = Math.abs(v);
+    return sign + "$" + abs.toLocaleString(undefined, { maximumFractionDigits: 0 });
+  }
+  function fmtCount(v) { return v.toLocaleString(); }
+
+  var tooltip = document.getElementById("tooltip");
+  function showTooltip(evt, title, valueLine, subLine) {
+    tooltip.innerHTML = "";
+    var val = document.createElement("div");
+    val.className = "tt-val";
+    val.textContent = valueLine;
+    var key = document.createElement("div");
+    key.className = "tt-key";
+    key.textContent = title;
+    tooltip.appendChild(val);
+    tooltip.appendChild(key);
+    if (subLine) {
+      var sub = document.createElement("div");
+      sub.className = "tt-key";
+      sub.textContent = subLine;
+      tooltip.appendChild(sub);
+    }
+    tooltip.classList.add("show");
+    positionTooltip(evt);
+  }
+  function positionTooltip(evt) {
+    var x = evt.clientX, y = evt.clientY;
+    var pad = 14;
+    var vw = window.innerWidth, vh = window.innerHeight;
+    tooltip.style.left = Math.min(x + pad, vw - 260) + "px";
+    tooltip.style.top = Math.min(y + pad, vh - 90) + "px";
+  }
+  function hideTooltip() { tooltip.classList.remove("show"); }
+
+  function colorFor(index, isDark) {
+    var p = isDark ? PALETTE_DARK : PALETTE;
+    return p[index % p.length];
+  }
+
+  var SVG_NS = "http://www.w3.org/2000/svg";
+
+  function buildRing(categories, colorMap) {
+    var r = 38, cx = 50, cy = 50, strokeW = 14;
+    var circumference = 2 * Math.PI * r;
+    var totalAbs = categories.reduce(function (s, c) { return s + Math.abs(c.total_value); }, 0);
+    var netTotal = categories.reduce(function (s, c) { return s + c.total_value; }, 0);
+    var rowCount = categories.reduce(function (s, c) { return s + c.row_count; }, 0);
+
+    var svg = document.createElementNS(SVG_NS, "svg");
+    svg.setAttribute("viewBox", "0 0 100 100");
+    svg.setAttribute("class", "ring");
+    svg.setAttribute("role", "img");
+
+    var bg = document.createElementNS(SVG_NS, "circle");
+    bg.setAttribute("cx", cx); bg.setAttribute("cy", cy); bg.setAttribute("r", r);
+    bg.setAttribute("fill", "none");
+    bg.setAttribute("stroke", "var(--track)");
+    bg.setAttribute("stroke-width", strokeW);
+    svg.appendChild(bg);
+
+    var offset = 0;
+    var sorted = categories.slice().sort(function (a, b) { return Math.abs(b.total_value) - Math.abs(a.total_value); });
+    sorted.forEach(function (cat) {
+      var val = Math.abs(cat.total_value);
+      if (!val || !totalAbs) return;
+      var frac = val / totalAbs;
+      var segLen = frac * circumference;
+
+      var seg = document.createElementNS(SVG_NS, "circle");
+      seg.setAttribute("cx", cx); seg.setAttribute("cy", cy); seg.setAttribute("r", r);
+      seg.setAttribute("fill", "none");
+      seg.setAttribute("stroke", colorMap[cat.name] || "var(--cat-other)");
+      seg.setAttribute("stroke-width", strokeW);
+      seg.setAttribute("stroke-dasharray", segLen.toFixed(2) + " " + (circumference - segLen).toFixed(2));
+      seg.setAttribute("stroke-dashoffset", (-offset).toFixed(2));
+      seg.setAttribute("transform", "rotate(-90 " + cx + " " + cy + ")");
+      seg.tabIndex = 0;
+      seg.style.cursor = "pointer";
+
+      (function (name, value, pct) {
+        function onMove(evt) {
+          showTooltip(evt, name, fmtMoney(value), pct.toFixed(1) + "% of this company's charges");
+        }
+        seg.addEventListener("pointermove", onMove);
+        seg.addEventListener("focus", onMove);
+        seg.addEventListener("pointerleave", hideTooltip);
+        seg.addEventListener("blur", hideTooltip);
+      })(cat.name, cat.total_value, frac * 100);
+
+      svg.appendChild(seg);
+      offset += segLen;
+    });
+
+    var centerVal = document.createElementNS(SVG_NS, "text");
+    centerVal.setAttribute("x", 50); centerVal.setAttribute("y", 47);
+    centerVal.setAttribute("text-anchor", "middle");
+    centerVal.setAttribute("class", "ring-total");
+    centerVal.textContent = fmtMoney(netTotal);
+    svg.appendChild(centerVal);
+
+    var centerSub = document.createElementNS(SVG_NS, "text");
+    centerSub.setAttribute("x", 50); centerSub.setAttribute("y", 59);
+    centerSub.setAttribute("text-anchor", "middle");
+    centerSub.setAttribute("class", "ring-sub");
+    centerSub.textContent = fmtCount(rowCount) + " rows";
+    svg.appendChild(centerSub);
+
+    return svg;
+  }
+
+  // Generic bar chart for a flat list of {name, row_count, total_value}
+  // objects, styled identically to the top-level chart. Used by the
+  // per-company page, where there's no subcategory breakdown to expand.
+  function renderCategoryBars(container, categories, colorMap) {
+    container.innerHTML = "";
+    var totalRows = categories.reduce(function (s, c) { return s + c.row_count; }, 0);
+    var sorted = categories.slice().sort(function (a, b) { return b.row_count - a.row_count; });
+    var maxRows = sorted.length ? sorted[0].row_count : 1;
+
+    sorted.forEach(function (cat) {
+      var color = colorMap[cat.name] || "var(--cat-other)";
+      var pct = totalRows ? (cat.row_count / totalRows * 100) : 0;
+      var widthPct = maxRows ? (cat.row_count / maxRows * 100) : 0;
+
+      var row = document.createElement("div");
+      row.className = "bar-row";
+
+      var sw = document.createElement("div");
+      sw.className = "swatch";
+      sw.style.background = color;
+      row.appendChild(sw);
+
+      var name = document.createElement("div");
+      name.className = "name";
+      name.textContent = cat.name;
+      row.appendChild(name);
+
+      var track = document.createElement("div");
+      track.className = "track";
+      track.tabIndex = 0;
+      var fill = document.createElement("div");
+      fill.className = "fill";
+      fill.style.width = "0%";
+      fill.style.background = color;
+      track.appendChild(fill);
+      row.appendChild(track);
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { fill.style.width = widthPct.toFixed(1) + "%"; });
+      });
+
+      var figs = document.createElement("div");
+      figs.className = "figs";
+      var pctSpan = document.createElement("span");
+      pctSpan.className = "pct";
+      pctSpan.textContent = pct.toFixed(1) + "%";
+      var amtSpan = document.createElement("span");
+      amtSpan.className = "amt";
+      amtSpan.textContent = fmtMoney(cat.total_value);
+      figs.appendChild(pctSpan);
+      figs.appendChild(amtSpan);
+      row.appendChild(figs);
+
+      (function (nm, rows, value) {
+        function onMove(evt) { showTooltip(evt, nm, fmtCount(rows) + " rows", "Total value: " + fmtMoney(value)); }
+        track.addEventListener("pointermove", onMove);
+        track.addEventListener("focus", onMove);
+        track.addEventListener("pointerleave", hideTooltip);
+        track.addEventListener("blur", hideTooltip);
+      })(cat.name, cat.row_count, cat.total_value);
+
+      container.appendChild(row);
+    });
+  }
+
+  // Generic renderer for a dropdown-driven breakdown page (bar chart +
+  // ring for whichever entity is selected). Used for both "By company"
+  // and "By carrier" -- same shape of data, same visuals, different
+  // labels and element ids.
+  function renderBreakdownPage(items, otherCount, otherRowCount, otherValue, ids, colorMap) {
+    var tabBtn = document.getElementById(ids.tabBtn);
+
+    if (!items.length) {
+      tabBtn.style.display = "none";
+      return;
+    }
+    tabBtn.style.display = "";
+
+    var select = document.getElementById(ids.select);
+    select.innerHTML = "";
+    items.forEach(function (it) {
+      var opt = document.createElement("option");
+      opt.value = it.name;
+      opt.textContent = it.name;
+      select.appendChild(opt);
+    });
+
+    function show(name) {
+      var it = items.find(function (x) { return x.name === name; });
+      if (!it) return;
+
+      var rowCount = it.categories.reduce(function (s, c) { return s + c.row_count; }, 0);
+      var net = it.categories.reduce(function (s, c) { return s + c.total_value; }, 0);
+      var gross = it.categories.filter(function (c) { return c.total_value >= 0; })
+        .reduce(function (s, c) { return s + c.total_value; }, 0);
+
+      document.getElementById(ids.kpiRow).innerHTML =
+        '<div class="kpi"><div class="label">Charge line items</div><div class="value">' + fmtCount(rowCount) + '</div></div>' +
+        '<div class="kpi"><div class="label">Gross charges</div><div class="value">' + fmtMoney(gross) + '</div></div>' +
+        '<div class="kpi"><div class="label">Net spend</div><div class="value">' + fmtMoney(net) + '</div></div>';
+
+      renderCategoryBars(document.getElementById(ids.bars), it.categories, colorMap);
+
+      var ringHolder = document.getElementById(ids.ringHolder);
+      ringHolder.innerHTML = "";
+      ringHolder.appendChild(buildRing(it.categories, colorMap));
+
+      var legend = document.getElementById(ids.legend);
+      legend.innerHTML = "";
+      it.categories.slice().sort(function (a, b) { return Math.abs(b.total_value) - Math.abs(a.total_value); })
+        .forEach(function (cat) {
+          var item = document.createElement("div");
+          item.className = "legend-item";
+          var dot = document.createElement("span");
+          dot.className = "legend-dot";
+          dot.style.background = colorMap[cat.name] || "var(--cat-other)";
+          var label = document.createElement("span");
+          label.className = "legend-label";
+          label.textContent = cat.name;
+          var amt = document.createElement("span");
+          amt.className = "legend-amt";
+          amt.textContent = fmtMoney(cat.total_value);
+          item.appendChild(dot);
+          item.appendChild(label);
+          item.appendChild(amt);
+          legend.appendChild(item);
+        });
+    }
+
+    select.onchange = function () { show(select.value); };
+    show(items[0].name);
+
+    var note = document.getElementById(ids.note);
+    if (otherCount) {
+      note.textContent = "Top " + items.length + " " + ids.label + " by charge volume are listed here; " +
+        otherCount + " smaller " + ids.label + " (" + fmtMoney(otherValue) + " combined) aren't broken out individually.";
+    } else {
+      note.textContent = "All " + ids.label + " with charge activity in this dataset are listed here.";
+    }
+  }
+
+  function render(summary) {
+    var isDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+      && document.documentElement.getAttribute("data-theme") !== "light";
+
+    // Assign a stable color index to every non-"other" category, in the
+    // order they arrive (Athena groups by major_category already).
+    var DATA = summary.categories.map(function (c, i) {
+      var isOther = c.name === MUTED_NAME;
+      return {
+        name: c.name,
+        count: c.row_count,
+        value: c.total_value,
+        color: isOther ? "var(--cat-other)" : colorFor(i, isDark),
+        isOther: isOther,
+        subs: c.subs || []
+      };
+    });
+
+    // Shared name -> color lookup so a company's ring segments match the
+    // same colors as the major-category bar chart above.
+    var categoryColorMap = {};
+    DATA.forEach(function (d) { categoryColorMap[d.name] = d.color; });
+
+    var TOTAL_ROWS = summary.total_transactions;
+    var otherEntry = DATA.find(function (d) { return d.isOther; });
+    var CATEGORIZED_ROWS = TOTAL_ROWS - (otherEntry ? otherEntry.count : 0);
+    var GROSS = DATA.filter(function (d) { return d.value >= 0; })
+      .reduce(function (s, d) { return s + d.value; }, 0);
+
+    document.getElementById("kpi-rows").textContent = fmtCount(TOTAL_ROWS);
+    document.getElementById("kpi-gross").textContent = fmtMoney(GROSS);
+    document.getElementById("kpi-coverage").textContent = (CATEGORIZED_ROWS / TOTAL_ROWS * 100).toFixed(1) + "%";
+
+    document.getElementById("subtitle").textContent =
+      fmtCount(TOTAL_ROWS) + " charge line items from the tracking-detail table, rolled up into " +
+      (DATA.length - (otherEntry ? 1 : 0)) + " major categories via the rule + TF-IDF classifier.";
+
+    var otherPct = otherEntry ? (otherEntry.count / TOTAL_ROWS * 100).toFixed(1) : "0.0";
+    document.getElementById("footnote").innerHTML =
+      "Categories that net negative (like discounts) reduce the invoice total. Percentages are share of the " +
+      fmtCount(TOTAL_ROWS) + " charge-line rows, not dollar value. \u201c" + MUTED_NAME + "\u201d (" + otherPct +
+      "% of rows) is left out of the panel grid below but included in the table view. " +
+      "Last updated " + new Date(summary.generated_at).toLocaleString() + ".";
+
+    // ---- Top-level bar chart ----
+    var topChart = document.getElementById("top-chart");
+    topChart.innerHTML = "";
+    var sortedTop = DATA.slice().sort(function (a, b) { return b.count - a.count; });
+    var maxPct = Math.max.apply(null, sortedTop.map(function (d) { return d.count / TOTAL_ROWS * 100; }));
+
+    sortedTop.forEach(function (d) {
+      var pct = d.count / TOTAL_ROWS * 100;
+      var row = document.createElement("div");
+      row.className = "bar-row";
+
+      var sw = document.createElement("div");
+      sw.className = "swatch";
+      sw.style.background = d.color;
+      row.appendChild(sw);
+
+      var name = document.createElement("div");
+      name.className = "name";
+      name.textContent = d.name;
+      row.appendChild(name);
+
+      var track = document.createElement("div");
+      track.className = "track";
+      track.tabIndex = 0;
+      var fill = document.createElement("div");
+      fill.className = "fill";
+      fill.style.width = "0%";
+      fill.style.background = d.color;
+      track.appendChild(fill);
+      row.appendChild(track);
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { fill.style.width = (pct / maxPct * 100).toFixed(1) + "%"; });
+      });
+
+      var figs = document.createElement("div");
+      figs.className = "figs";
+      var pctSpan = document.createElement("span");
+      pctSpan.className = "pct";
+      pctSpan.textContent = pct.toFixed(1) + "%";
+      var amtSpan = document.createElement("span");
+      amtSpan.className = "amt";
+      amtSpan.textContent = fmtMoney(d.value);
+      figs.appendChild(pctSpan);
+      figs.appendChild(amtSpan);
+      row.appendChild(figs);
+
+      function onMove(evt) {
+        showTooltip(evt, d.name, fmtCount(d.count) + " rows", "Total value: " + fmtMoney(d.value));
+      }
+      track.addEventListener("pointermove", onMove);
+      track.addEventListener("focus", function (evt) { showTooltip(evt, d.name, fmtCount(d.count) + " rows", "Total value: " + fmtMoney(d.value)); });
+      track.addEventListener("pointerleave", hideTooltip);
+      track.addEventListener("blur", hideTooltip);
+
+      topChart.appendChild(row);
+    });
+
+    // ---- Small multiples panels ----
+    var panelsEl = document.getElementById("panels");
+    panelsEl.innerHTML = "";
+    DATA.filter(function (d) { return !d.isOther; }).forEach(function (d) {
+      var panel = document.createElement("div");
+      panel.className = "panel";
+
+      var accent = document.createElement("div");
+      accent.className = "accent";
+      accent.style.background = d.color;
+      panel.appendChild(accent);
+
+      var body = document.createElement("div");
+      body.className = "panel-body";
+
+      var title = document.createElement("div");
+      title.className = "panel-title";
+      var nm = document.createElement("div");
+      nm.className = "name";
+      var chevron = document.createElement("span");
+      chevron.className = "chevron";
+      chevron.textContent = "\u25B8";
+      var nmText = document.createElement("span");
+      nmText.textContent = d.name;
+      nm.appendChild(chevron);
+      nm.appendChild(nmText);
+      var tot = document.createElement("div");
+      tot.className = "total";
+      tot.textContent = fmtCount(d.count) + " rows";
+      title.appendChild(nm);
+      title.appendChild(tot);
+      title.addEventListener("click", function () {
+        panel.classList.toggle("expanded");
+      });
+      body.appendChild(title);
+
+      if (d.subs.length) {
+        var maxSub = Math.max.apply(null, d.subs.map(function (s) { return s.row_count; }));
+        var sortedSubs = d.subs.slice().sort(function (a, b) { return b.row_count - a.row_count; });
+
+        sortedSubs.forEach(function (s) {
+          var row = document.createElement("div");
+          row.className = "sub-row";
+
+          var label = document.createElement("div");
+          label.className = "sub-label";
+          var sn = document.createElement("span");
+          sn.className = "sub-name";
+          sn.textContent = s.name;
+          var sc = document.createElement("span");
+          sc.className = "sub-count";
+          sc.textContent = fmtCount(s.row_count);
+          label.appendChild(sn);
+          label.appendChild(sc);
+          row.appendChild(label);
+
+          var track = document.createElement("div");
+          track.className = "track";
+          track.tabIndex = 0;
+          var fill = document.createElement("div");
+          fill.className = "fill";
+          fill.style.width = "0%";
+          fill.style.background = d.color;
+          track.appendChild(fill);
+          row.appendChild(track);
+          requestAnimationFrame(function () {
+            requestAnimationFrame(function () { fill.style.width = (s.row_count / maxSub * 100).toFixed(1) + "%"; });
+          });
+
+          function onMove(evt) {
+            showTooltip(evt, d.name + " \u2192 " + s.name, fmtCount(s.row_count) + " rows", "Total value: " + fmtMoney(s.total_value));
+          }
+          track.addEventListener("pointermove", onMove);
+          track.addEventListener("focus", function (evt) { showTooltip(evt, d.name + " \u2192 " + s.name, fmtCount(s.row_count) + " rows", "Total value: " + fmtMoney(s.total_value)); });
+          track.addEventListener("pointerleave", hideTooltip);
+          track.addEventListener("blur", hideTooltip);
+
+          body.appendChild(row);
+        });
+      }
+
+      // ---- Expandable detail table (per-subcategory precision) ----
+      if (d.subs.length) {
+        var detail = document.createElement("div");
+        detail.className = "panel-detail";
+        var detailInner = document.createElement("div");
+        detailInner.className = "panel-detail-inner";
+
+        var table = document.createElement("table");
+        var thead = document.createElement("thead");
+        thead.innerHTML = "<tr><th>Subcategory</th><th class=\"num\">Rows</th><th class=\"num\">% of category</th><th class=\"num\">Total</th><th class=\"num\">Avg / charge</th></tr>";
+        table.appendChild(thead);
+
+        var tbodyDetail = document.createElement("tbody");
+        d.subs.slice().sort(function (a, b) { return b.row_count - a.row_count; }).forEach(function (s) {
+          var tr = document.createElement("tr");
+          var avg = s.row_count ? s.total_value / s.row_count : 0;
+          tr.innerHTML =
+            "<td>" + s.name + "</td>" +
+            "<td class=\"num\">" + fmtCount(s.row_count) + "</td>" +
+            "<td class=\"num\">" + (s.row_count / d.count * 100).toFixed(1) + "%</td>" +
+            "<td class=\"num\">" + fmtMoney(s.total_value) + "</td>" +
+            "<td class=\"num\">" + fmtMoney(avg) + "</td>";
+          tbodyDetail.appendChild(tr);
+        });
+        table.appendChild(tbodyDetail);
+        detailInner.appendChild(table);
+        detail.appendChild(detailInner);
+        body.appendChild(detail);
+      }
+
+      panel.appendChild(body);
+      panelsEl.appendChild(panel);
+    });
+
+    // ---- Table view ----
+    var tbody = document.querySelector("#data-table tbody");
+    tbody.innerHTML = "";
+    DATA.slice().sort(function (a, b) { return b.count - a.count; }).forEach(function (d) {
+      var subs = d.subs.length ? d.subs.slice() : [{ name: "Unclassified", row_count: d.count, total_value: d.value }];
+      subs.sort(function (a, b) { return b.row_count - a.row_count; }).forEach(function (s, i) {
+        var tr = document.createElement("tr");
+        var tdMajor = document.createElement("td");
+        tdMajor.textContent = i === 0 ? d.name : "";
+        var tdSub = document.createElement("td");
+        tdSub.textContent = s.name;
+        var tdCount = document.createElement("td");
+        tdCount.className = "num";
+        tdCount.textContent = fmtCount(s.row_count);
+        var tdPct = document.createElement("td");
+        tdPct.className = "num";
+        tdPct.textContent = (s.row_count / TOTAL_ROWS * 100).toFixed(1) + "%";
+        var tdVal = document.createElement("td");
+        tdVal.className = "num";
+        tdVal.textContent = fmtMoney(s.total_value);
+        tr.appendChild(tdMajor);
+        tr.appendChild(tdSub);
+        tr.appendChild(tdCount);
+        tr.appendChild(tdPct);
+        tr.appendChild(tdVal);
+        tbody.appendChild(tr);
+      });
+    });
+
+    // ---- Per-company and per-carrier pages (bar chart + ring, picked via dropdown) ----
+    renderBreakdownPage(
+      summary.companies || [], summary.other_companies_count, summary.other_companies_row_count,
+      summary.other_companies_total_value,
+      { tabBtn: "company-tab-btn", select: "company-select", kpiRow: "company-kpi-row",
+        bars: "company-bars", ringHolder: "company-ring-holder", legend: "company-ring-legend",
+        note: "company-note", label: "companies" },
+      categoryColorMap
+    );
+    renderBreakdownPage(
+      summary.carriers || [], summary.other_carriers_count, summary.other_carriers_row_count,
+      summary.other_carriers_total_value,
+      { tabBtn: "carrier-tab-btn", select: "carrier-select", kpiRow: "carrier-kpi-row",
+        bars: "carrier-bars", ringHolder: "carrier-ring-holder", legend: "carrier-ring-legend",
+        note: "carrier-note", label: "carriers" },
+      categoryColorMap
+    );
+  }
+
+  document.querySelectorAll(".tab-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      document.querySelectorAll(".tab-btn").forEach(function (b) { b.classList.remove("active"); });
+      document.querySelectorAll(".page").forEach(function (p) { p.classList.remove("active"); });
+      btn.classList.add("active");
+      document.getElementById("page-" + btn.dataset.page).classList.add("active");
+    });
+  });
+
+  var toggleBtn = document.getElementById("table-toggle");
+  var chartView = document.getElementById("chart-view");
+  var tableView = document.getElementById("table-view");
+  var showingTable = false;
+  toggleBtn.addEventListener("click", function () {
+    showingTable = !showingTable;
+    chartView.style.display = showingTable ? "none" : "";
+    tableView.style.display = showingTable ? "" : "none";
+    toggleBtn.textContent = showingTable ? "Show as chart" : "Show as table";
+  });
+
+  fetch("summary.json", { cache: "no-store" })
+    .then(function (r) {
+      if (!r.ok) throw new Error("summary.json not found (" + r.status + ")");
+      return r.json();
+    })
+    .then(render)
+    .catch(function (err) {
+      document.getElementById("subtitle").textContent =
+        "Couldn't load summary.json \u2014 " + err.message + ". Make sure it's in the same S3 folder as this page.";
+      document.getElementById("top-chart").innerHTML = "";
+    });
+})();
+</script>
+</body>
+</html>
