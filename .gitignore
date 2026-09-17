@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.DS_Store
+
+# AWS credentials
+.aws/
+*.pem
+credentials
+credentials.json
+aws_credentials*
