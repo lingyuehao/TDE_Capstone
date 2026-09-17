@@ -12,12 +12,13 @@
   --border:         rgba(11,11,11,0.10);
   --track:          #f0efec;
 
-  --cat-1: #2a78d6; /* Base Freight / Transportation */
+  --cat-1: #2a78d6; /* Line Haul / Base Transportation */
   --cat-2: #eb6834; /* Fuel Surcharge */
-  --cat-3: #1baf7a; /* Discounts & Credits */
+  --cat-3: #1baf7a; /* Discounts */
   --cat-4: #eda100; /* Accessorial / Delivery Surcharge */
   --cat-5: #e87ba4; /* Taxes & Customs */
   --cat-6: #008300; /* Administrative & Service Fees */
+  --cat-7: #4a3aa7; /* Credits */
   --cat-other: #898781;
 }
 @media (prefers-color-scheme: dark) {
@@ -39,6 +40,7 @@
     --cat-4: #c98500;
     --cat-5: #d55181;
     --cat-6: #008300;
+    --cat-7: #9085e9;
     --cat-other: #898781;
   }
 }
@@ -60,6 +62,7 @@
   --cat-4: #c98500;
   --cat-5: #d55181;
   --cat-6: #008300;
+  --cat-7: #9085e9;
   --cat-other: #898781;
 }
 
@@ -210,7 +213,7 @@ table.data-table tr:last-child td { border-bottom: none; }
     <h1>Charge Category Map</h1>
     <p class="subtitle">
       256,764 charge line items from the tracking-detail table, rolled up from
-      3,032 distinct raw (Charge Type, Charge Description) labels into 6 major
+      3,032 distinct raw (Charge Type, Charge Description) labels into 7 major
       categories via the rule + TF-IDF classifier.
     </p>
 
@@ -248,9 +251,13 @@ table.data-table tr:last-child td { border-bottom: none; }
     </div>
 
     <p class="foot-note">
-      "Discounts &amp; Credits" nets negative (discounts reduce the invoice). Percentages are share of the
-      256,764 charge-line rows, not dollar value. "Other / Uncategorized" (2.1% of rows) is left out of the
-      panel grid below but included in the table view.
+      "Discounts" nets negative (discounts reduce the invoice) and is rate-based (earned/grace/general
+      discount agreements). "Credits" is carrier-issued refunds only (currently just 7 rows). Billing/invoice
+      corrections ("Billing Adjustment / Correction") and "Chargeback / Reversal" are filed under
+      Administrative &amp; Service Fees instead of Discounts or Credits — a row-level check found 99.1% of
+      billing-correction rows are positive charges, not price concessions or refunds. Percentages are share
+      of the 256,764 charge-line rows, not dollar value. "Other / Uncategorized" (1.3% of rows) is left out
+      of the panel grid below but included in the table view.
     </p>
   </div>
 </div>
@@ -261,55 +268,60 @@ table.data-table tr:last-child td { border-bottom: none; }
 (function () {
   var root = document.currentScript.previousElementSibling.previousElementSibling; // .viz-root wrap fallback not used
   var DATA = [
-    { key: "cat-1", name: "Base Freight / Transportation", count: 68594, value: 7575084.11, subs: [
-      { name: "Transportation / Base Charge", count: 42751, value: 5658126.10 },
-      { name: "Ground", count: 18066, value: 256525.76 },
-      { name: "International / Export / Import Freight", count: 4932, value: 289150.32 },
-      { name: "Domestic Air (Next/2nd/3 Day)", count: 1729, value: 89909.89 },
-      { name: "Line Haul", count: 1107, value: 1274667.74 },
-      { name: "Ocean Freight", count: 9, value: 6704.30 }
-    ]},
-    { key: "cat-2", name: "Fuel Surcharge", count: 74071, value: 678557.24, subs: [
+    { key: "cat-2", name: "Fuel Surcharge", count: 74073, value: 680240.60, subs: [
       { name: "Domestic Fuel Surcharge", count: 67043, value: 651965.62 },
       { name: "Fuel Surcharge Correction", count: 5571, value: 17309.02 },
-      { name: "International Fuel Surcharge", count: 1117, value: 8173.78 },
+      { name: "International Fuel Surcharge", count: 1119, value: 9857.14 },
       { name: "Chargeback Fuel Surcharge", count: 340, value: 1108.82 }
     ]},
-    { key: "cat-3", name: "Discounts & Credits", count: 77774, value: -4003134.48, subs: [
-      { name: "General Discount", count: 36407, value: -3562129.27 },
+    { key: "cat-3", name: "Discounts", count: 71099, value: -4167908.82, subs: [
+      { name: "General Discount", count: 36381, value: -3563696.20 },
       { name: "Earned Discount", count: 22904, value: -375705.98 },
-      { name: "Grace Discount", count: 11814, value: -228506.64 },
-      { name: "Billing Adjustment / Correction", count: 5387, value: 38781.38 },
-      { name: "Chargeback / Reversal", count: 1190, value: 123331.93 },
-      { name: "Credit From Carrier", count: 72, value: 1094.10 }
+      { name: "Grace Discount", count: 11814, value: -228506.64 }
     ]},
-    { key: "cat-4", name: "Accessorial / Delivery Surcharge", count: 19967, value: 452077.66, subs: [
-      { name: "Delivery Area Surcharge (DAS)", count: 6875, value: 87821.60 },
-      { name: "Residential Delivery/Surcharge", count: 4767, value: 24471.46 },
+    { key: "cat-1", name: "Line Haul / Base Transportation", count: 68372, value: 7558123.95, subs: [
+      { name: "General / Mode Not Specified", count: 43266, value: 6114412.42 },
+      { name: "Ground", count: 18068, value: 256638.56 },
+      { name: "International / Export / Import Freight", count: 4962, value: 375047.25 },
+      { name: "Air Freight", count: 2053, value: 798321.42 },
+      { name: "Ocean Freight", count: 23, value: 13704.30 }
+    ]},
+    { key: "cat-4", name: "Accessorial / Delivery Surcharge", count: 20174, value: 484263.84, subs: [
+      { name: "Delivery Area Surcharge (DAS)", count: 6755, value: 95012.66 },
+      { name: "Residential Delivery/Surcharge", count: 4722, value: 23743.67 },
       { name: "Wait Time / Mileage / Toll", count: 2693, value: 110788.34 },
-      { name: "Additional Handling", count: 1684, value: 151469.51 },
-      { name: "Demand / Peak Surcharge", count: 968, value: 9617.35 },
+      { name: "Additional Handling", count: 1798, value: 148881.46 },
+      { name: "Demand / Peak Surcharge", count: 1401, value: 53689.47 },
       { name: "Address Correction", count: 848, value: 12477.50 },
       { name: "Signature Required", count: 803, value: 6718.75 },
-      { name: "Saturday / After Hours", count: 699, value: 13200.01 },
-      { name: "Security Surcharge", count: 630, value: 35513.14 }
+      { name: "Saturday / After Hours / Holiday", count: 734, value: 14587.59 },
+      { name: "Security Surcharge", count: 416, value: 18248.24 },
+      { name: "Commercial / Business Delivery Surcharge", count: 4, value: 116.16 }
     ]},
-    { key: "cat-5", name: "Taxes & Customs", count: 7521, value: 360958.70, subs: [
-      { name: "VAT", count: 4282, value: 67909.66 },
-      { name: "Customs / Brokerage", count: 1397, value: 72860.23 },
-      { name: "GST / HST", count: 1066, value: 28403.12 },
+    { key: "cat-5", name: "Taxes & Customs", count: 7598, value: 355680.25, subs: [
+      { name: "VAT", count: 4279, value: 54524.71 },
+      { name: "Customs / Brokerage", count: 1478, value: 81031.36 },
+      { name: "GST / HST", count: 1065, value: 28338.49 },
       { name: "Duty & Import Tax", count: 578, value: 169600.09 },
       { name: "Sales / General Tax", count: 198, value: 22185.60 }
     ]},
-    { key: "cat-6", name: "Administrative & Service Fees", count: 2692, value: 157337.78, subs: [
+    { key: "cat-6", name: "Administrative & Service Fees", count: 11406, value: 234421.28, subs: [
+      { name: "Billing Adjustment / Correction", count: 5385, value: 40890.80 },
+      { name: "Sustainability / Carbon Fee", count: 2409, value: 13016.75 },
       { name: "Third Party Billing", count: 918, value: 15163.44 },
       { name: "Pickup Service", count: 654, value: 71669.49 },
-      { name: "Disbursement Fee", count: 553, value: 6377.96 },
-      { name: "Document Fee", count: 463, value: 17820.97 },
+      { name: "Disbursement Fee", count: 554, value: 13059.50 },
+      { name: "Chargeback / Reversal", count: 481, value: 6678.52 },
+      { name: "Document Fee", count: 338, value: 11848.44 },
+      { name: "Returns / Print Label Fee", count: 334, value: 5983.01 },
+      { name: "Declared Value / Insurance", count: 229, value: 9805.41 },
       { name: "Package Handling / Storage", count: 104, value: 46305.92 }
     ]},
-    { key: "cat-other", name: "Other / Uncategorized", count: 6145, value: 556843.34, subs: [
-      { name: "Unclassified", count: 6145, value: 556843.34 }
+    { key: "cat-7", name: "Credits", count: 7, value: -1695.99, subs: [
+      { name: "Credit From Carrier", count: 7, value: -1695.99 }
+    ]},
+    { key: "cat-other", name: "Other / Uncategorized", count: 4035, value: 634599.24, subs: [
+      { name: "Unclassified", count: 4035, value: 634599.24 }
     ]}
   ];
 
