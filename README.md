@@ -160,3 +160,14 @@ taxonomy, and a similarly small number have non-numeric junk in
 (`COALESCE`/`TRY_CAST` land them in `Other / Uncategorized` /
 `NULL`-safe totals rather than failing the pipeline) rather than fixed at
 the source, since they're a rounding error against the total row count.
+
+## Related work
+
+The exploratory notebooks this pipeline's taxonomy and logic grew out of
+(`load_data.ipynb`, `charge_categorization.ipynb`,
+`charge_categorization_check.ipynb`) live on the `main` branch under
+`notebooks/`, alongside the raw sample data (`data/`) and generated
+review output (`outputs/`) -- see that branch's README for their
+structure. This branch's `src/taxonomy.py` and `main`'s are kept in sync
+by hand; they're logically the same taxonomy, just documented for their
+respective contexts (this pipeline vs. the notebooks).
