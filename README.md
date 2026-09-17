@@ -27,8 +27,10 @@ or done by hand.
 ## Pipeline steps
 
 1. **Ingest** -- raw exports land in `s3://capstone-tde-demo/raw/`
-   (`trackingdetail.csv`, `Data_Import_Table.csv`). Not scripted; this is
-   just wherever the exports get dropped.
+   (`trackingdetail.csv`, `Data_Import_Table.csv`). Not scripted today;
+   this is just wherever the exports get dropped. `glue_jobs/ingest_api.py`
+   is a placeholder for automating this from a live API on a daily
+   schedule -- see "Live data ingestion" below.
 2. **`glue_jobs/clean_charge_raw.py`** -- fixes the embedded-newline
    problem in the charge export. Reads the raw file with Python's `csv`
    module (which correctly reassembles multi-line quoted fields),
@@ -73,17 +75,21 @@ python orchestrate.py
 This assumes:
 - AWS credentials are configured (same account/role with access to the
   Glue jobs, Athena, and the S3 bucket)
-- The 5 Glue jobs already exist in Glue, named per `GLUE_JOB_NAMES` in
+- The Glue jobs already exist in Glue, named per `GLUE_JOB_NAMES` in
   `orchestrate.py` (`clean-charge-raw`, `clean-data-import`,
   `charge-type`, `build-charge-categorized`, `dashboard`) -- this script
   triggers runs of existing jobs, it doesn't create them
+
+By default this runs 5 of the 6 Glue jobs `setup_aws.py` sets up --
+`ingest-api` is skipped because `RUN_INGEST_STEP` in `orchestrate.py` is
+`False` (see "Live data ingestion" below).
 
 ## Glue job setup (one-time, or whenever a script changes)
 
 `setup_aws.py` does this end-to-end via `boto3` -- no console clicking:
 uploads every `glue_jobs/*.py` script plus `src/taxonomy.py` to
 `s3://capstone-tde-demo/code/`, then creates (or updates, if they already
-exist) all 5 Glue jobs with the right script location, job parameters,
+exist) all 6 Glue jobs with the right script location, job parameters,
 and IAM role.
 
 ```bash
@@ -103,11 +109,12 @@ the bucket and Athena access (for `build_charge_categorized.py` and
 create IAM roles/policies; those are account-security-sensitive and worth
 setting up deliberately.
 
-All 5 jobs are **Python Shell** jobs. For reference, here's what
+All 6 jobs are **Python Shell** jobs. For reference, here's what
 `setup_aws.py` configures for each:
 
 | Job name | Script | Job parameters | Extra |
 |---|---|---|---|
+| `ingest-api` | `glue_jobs/ingest_api.py` | `--API_ENDPOINT`, `--API_SECRET_NAME`, `--RAW_CHARGE_S3` | Placeholder -- not triggered by `orchestrate.py` by default, see "Live data ingestion" |
 | `clean-charge-raw` | `glue_jobs/clean_charge_raw.py` | `--RAW_CHARGE_S3`, `--CLEAN_OUTPUT_S3` | -- |
 | `clean-data-import` | `glue_jobs/clean_data_import.py` | `--RAW_DATA_IMPORT_S3`, `--LOOKUP_OUTPUT_S3` | -- |
 | `charge-type` | `glue_jobs/charge_type.py` | `--RAW_S3_PATH`, `--MAPPING_S3_PATH` | `--extra-py-files s3://.../code/taxonomy.py`, `--additional-python-modules pandas,scikit-learn` |
@@ -118,6 +125,38 @@ All 5 jobs are **Python Shell** jobs. For reference, here's what
 `charge-type` job via `--extra-py-files` -- that's what makes `from
 taxonomy import ...` resolve inside that job, and keeps the taxonomy as a
 single source of truth instead of copy-pasted into the job script.
+
+## Live data ingestion (placeholder)
+
+Today, "ingest" means someone manually drops export files into
+`s3://capstone-tde-demo/raw/`. `glue_jobs/ingest_api.py` is a placeholder
+for replacing that with a daily pull from a live API, landing data in the
+same `raw/` location so the rest of the pipeline picks it up unchanged --
+nothing about `clean_charge_raw.py` onward needs to know or care whether
+`raw/` was populated by hand or by this job.
+
+Nothing here is live yet:
+- `fetch_from_api()` in `ingest_api.py` raises `NotImplementedError` on
+  purpose -- there's no real endpoint or auth wired up.
+- `RUN_INGEST_STEP` in `orchestrate.py` is `False`, so `orchestrate.py`
+  doesn't call this job even though `setup_aws.py` creates it in Glue.
+- No recurring trigger (e.g. an EventBridge Scheduler rule) is deployed.
+
+To go live:
+1. Implement `fetch_from_api()` with the real endpoint and auth, and set
+   real values for `--API_ENDPOINT` / `--API_SECRET_NAME` in
+   `setup_aws.py`'s `JOBS` list (storing the actual key/token in Secrets
+   Manager under that secret name).
+2. Set `RUN_INGEST_STEP = True` in `orchestrate.py`.
+3. Add a daily trigger -- the natural fit is an EventBridge Scheduler
+   rule (cron, once a day) invoking a small Lambda that calls
+   `glue.start_job_run` for `ingest-api` and then runs the same sequence
+   `orchestrate.py` already does (or just runs `orchestrate.py` itself
+   somewhere schedulable, e.g. as a container task). Once that fires, the
+   dashboard updates itself: `dashboard.py`'s existing
+   `dashboard/summary.json` rewrite already reflects whatever's currently
+   in `charge_categorized` -- no separate "refresh the dashboard" step is
+   needed beyond the pipeline re-running.
 
 ## S3 layout
 

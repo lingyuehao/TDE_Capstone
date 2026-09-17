@@ -10,6 +10,10 @@ standing up a Glue Workflow or Step Functions state machine for something
 that runs occasionally by hand anyway.
 
 Sequence:
+  0. (placeholder, off by default) Run ingest-api Glue job -> fresh raw
+     file in S3, pulled from an external API. See RUN_INGEST_STEP below
+     and glue_jobs/ingest_api.py's docstring -- there's no live API
+     wired up yet, so this step is skipped unless explicitly enabled.
   1. Run clean-charge-raw Glue job          -> charge_raw_clean file in S3
   2. Run clean-data-import Glue job         -> data_import_lookup file in S3
   3. Ensure Athena tables exist (DDL)       -> charge_raw_clean, data_import_lookup, charge_mapping
@@ -39,7 +43,16 @@ AWS_REGION = "us-east-1"
 ATHENA_DATABASE = "tde_demo"
 ATHENA_OUTPUT_S3 = "s3://capstone-tde-demo/athena-results/"
 
+# Flip to True once glue_jobs/ingest_api.py has a real API endpoint/secret
+# wired up (it currently raises NotImplementedError on purpose). Until
+# then, leave this False -- there's nothing live for it to pull from, and
+# running it would just fail the whole pipeline before the real steps
+# (which still work fine against whatever's already in raw/) get a chance
+# to run.
+RUN_INGEST_STEP = False
+
 GLUE_JOB_NAMES = {
+    "ingest_api": "ingest-api",
     "clean_charge_raw": "clean-charge-raw",
     "clean_data_import": "clean-data-import",
     "charge_type": "charge-type",
@@ -115,6 +128,9 @@ def run_ddl_file(table_name, path, poll_seconds=2):
 
 def main():
     try:
+        if RUN_INGEST_STEP:
+            run_glue_job(GLUE_JOB_NAMES["ingest_api"])
+
         run_glue_job(GLUE_JOB_NAMES["clean_charge_raw"])
         run_glue_job(GLUE_JOB_NAMES["clean_data_import"])
 

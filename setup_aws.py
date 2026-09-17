@@ -1,7 +1,9 @@
 """
 One-time (or re-run-when-changed) setup script: uploads this repo's Glue
 job scripts + the shared taxonomy module to S3, then creates (or updates)
-all 5 Glue Python Shell jobs via boto3 -- no console clicking.
+all 6 Glue Python Shell jobs via boto3 -- no console clicking. (One of
+those 6, ingest-api, is a placeholder not yet triggered by
+orchestrate.py -- see glue_jobs/ingest_api.py.)
 
 This is separate from orchestrate.py on purpose: orchestrate.py TRIGGERS
 runs of jobs that already exist; this script CREATES/UPDATES the jobs
@@ -44,6 +46,22 @@ ATHENA_OUTPUT_S3 = f"s3://{BUCKET}/athena-results/"
 # the default arguments (job parameters) Glue will use unless overridden
 # at run time. Matches the README's job-setup table.
 JOBS = [
+    {
+        # Placeholder -- see glue_jobs/ingest_api.py's docstring. Included
+        # here so `setup_aws.py` keeps the job's script/definition current
+        # in Glue, but it's not wired into orchestrate.py's daily run yet
+        # (RUN_INGEST_STEP there is False) since there's no real API/secret
+        # behind API_ENDPOINT / API_SECRET_NAME.
+        "name": "ingest-api",
+        "script_path": "glue_jobs/ingest_api.py",
+        "default_args": {
+            "--API_ENDPOINT": "https://example.invalid/v1/charges",
+            "--API_SECRET_NAME": "tde-demo/api-key",
+            "--RAW_CHARGE_S3": f"s3://{BUCKET}/raw/trackingdetail.csv",
+        },
+        "extra_py_files": None,
+        "additional_python_modules": None,
+    },
     {
         "name": "clean-charge-raw",
         "script_path": "glue_jobs/clean_charge_raw.py",
