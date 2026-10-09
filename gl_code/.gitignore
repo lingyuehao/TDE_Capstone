@@ -1,7 +1,10 @@
-# data (UPS billing files)
-input/
-output/
-history/
+# data (UPS billing files) - keep the folders, not the files
+input/*
+output/*
+history/*
+!input/.gitkeep
+!output/.gitkeep
+!history/.gitkeep
 *.csv
 *.xlsx
 
