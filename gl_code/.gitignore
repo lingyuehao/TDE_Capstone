@@ -1,0 +1,22 @@
+# data (UPS billing files)
+input/
+output/
+history/
+*.csv
+*.xlsx
+
+# jupyter
+.ipynb_checkpoints/
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# macOS
+.DS_Store
+
+# local tool settings
+.claude/
+.vscode/
